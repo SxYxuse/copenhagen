@@ -1,6 +1,6 @@
 # The Copenhagen Book
 
-**[sx copenhagen](link_here)**
+**[\_](https://github.com/SxYxuse/copenhagen)**
 
 Le Livre de Copenhague fournit des lignes directrices générales sur la mise en œuvre de l'authentification dans les applications web. Il est gratuit, open source et maintenu par la communauté. Il peut parfois être subjectif ou incomplet, mais nous espérons qu'il comble un certain vide dans les ressources en ligne. Nous recommandons de l'utiliser en complément de la [série de Cheat Sheets OWASP](https://cheatsheetseries.owasp.org/index.html).
 
