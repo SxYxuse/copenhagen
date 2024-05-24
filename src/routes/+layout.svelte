@@ -4,12 +4,14 @@
 	import { ModeWatcher, toggleMode } from 'mode-watcher';
 	import { Button } from '$lib/components/ui/button';
 	import { Icons } from '$lib/components/icons';
+	import type { LayoutData } from './$types';
 
 	type Props = {
+		data: LayoutData;
 		children: Snippet;
 	};
 
-	let { children }: Props = $props();
+	let { data, children }: Props = $props();
 </script>
 
 <ModeWatcher />
@@ -29,7 +31,12 @@
 
 <main class="max-w-screen-lg py-4 mx-auto w-full flex flex-col">
 	<div class="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
-		<aside class="lg:w-1/5">cc</aside>
+		<aside class="lg:w-1/5 flex flex-col">
+			<a href="/" class="text-sm font-bold">Guides</a>
+			{#each data.pages as page}
+				<a href={page.slug} class="text-sm py-1">{page.title}</a>
+			{/each}
+		</aside>
 		<div class="flex-1 lg:max-w-screen-lg">
 			{@render children()}
 		</div>
