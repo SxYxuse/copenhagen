@@ -6,4 +6,4 @@ Le Livre de Copenhague fournit des lignes directrices générales sur la mise en
 
 Si vous avez des suggestions ou des préoccupations, envisagez d'ouvrir un nouvel issue.
 
-**Note :** Ceci est une retranscription de la version originale autorisée par le créateur. **[thecopenhagenbook.com](https://thecopenhagenbook.com)**
+**Note :** Ceci est une retranscription de la version originale autorisée par son créateur. **[thecopenhagenbook.com](https://thecopenhagenbook.com)**
