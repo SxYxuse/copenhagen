@@ -1,11 +1,8 @@
 import adapter from '@sveltejs/adapter-node';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
-import { defineConfig, mdsx } from 'mdsx';
-
-export const mdsxConfig = defineConfig({
-	extensions: ['.md']
-});
+import { mdsx } from 'mdsx';
+import { mdsxConfig } from './mdsx.config.js';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {

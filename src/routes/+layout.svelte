@@ -37,7 +37,7 @@
 				<a href={page.slug} class="text-sm py-1">{page.title}</a>
 			{/each}
 		</aside>
-		<div class="flex-1 lg:max-w-screen-lg">
+		<div class="flex-1 lg:max-w-screen-lg md">
 			{@render children()}
 		</div>
 	</div>
