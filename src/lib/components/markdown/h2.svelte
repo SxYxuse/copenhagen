@@ -1,0 +1,13 @@
+<script lang="ts">
+	import { cn } from '$lib/utils';
+
+	let className: string | undefined | null = undefined;
+	export { className as class };
+</script>
+
+<h2
+	class={cn('mt-6 -scroll-m-36 text-[27px] font-semibold tracking-[-0.01em] first:mt-0', className)}
+	{...$$restProps}
+>
+	<slot />
+</h2>

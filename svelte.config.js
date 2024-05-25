@@ -1,15 +1,14 @@
 import adapter from '@sveltejs/adapter-node';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
-import sveltedown from './src/lib/sveltedown.js';
 
-// import { mdsx } from 'mdsx';
-// import { mdsxConfig } from './mdsx.config.js';
+import { mdsx } from 'mdsx';
+import { mdsxConfig } from './mdsx.config.js';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	// Consult https://kit.svelte.dev/docs/integrations#preprocessors
 	// for more information about preprocessors
-	preprocess: [sveltedown(), vitePreprocess()],
+	preprocess: [mdsx(mdsxConfig), vitePreprocess()],
 	extensions: ['.svelte', '.md'],
 	kit: {
 		// adapter-auto only supports some environments, see https://kit.svelte.dev/docs/adapter-auto for a list.

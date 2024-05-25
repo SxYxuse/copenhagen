@@ -1,4 +1,5 @@
 <script lang="ts">
+	import '$lib/styles/markdown.postcss';
 	import type { PageData } from './$types';
 
 	type Props = {

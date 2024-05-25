@@ -5,6 +5,8 @@
 	import { Button } from '$lib/components/ui/button';
 	import { Icons } from '$lib/components/icons';
 	import type { LayoutData } from './$types';
+	import { page } from '$app/stores';
+	import { cn } from '$lib/utils';
 
 	type Props = {
 		data: LayoutData;
@@ -29,15 +31,22 @@
 	</Button>
 </header>
 
-<main class="max-w-screen-lg py-4 mx-auto w-full flex flex-col">
+<main class="max-w-screen-lg py-4 mx-auto w-full">
 	<div class="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
-		<aside class="lg:w-1/5 flex flex-col">
-			<a href="/" class="text-sm font-bold">Guides</a>
-			{#each data.pages as page}
-				<a href={page.slug} class="text-sm py-1">{page.title}</a>
-			{/each}
+		<aside class="lg:w-1/5 sticky top-0">
+			<div class="flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1">
+				<a href="/" class="text-sm font-bold">Guides</a>
+				{#each data.pages as p}
+					{@const isActive = $page.url.pathname === '/' + p.slug}
+					<a
+						href={p.slug}
+						class={cn('text-sm py-1', { 'text-blue-600 dark:text-blue-500': isActive })}
+						>{p.title}</a
+					>
+				{/each}
+			</div>
 		</aside>
-		<div class="flex-1 lg:max-w-screen-lg md">
+		<div class="flex-1 lg:max-w-screen-md">
 			{@render children()}
 		</div>
 	</div>
