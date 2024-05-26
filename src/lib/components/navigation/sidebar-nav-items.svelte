@@ -15,7 +15,9 @@
 					class={cn(
 						'group inline-flex w-full items-center rounded-md px-2.5 py-1.5 text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-background',
 						item.disabled && 'cursor-not-allowed opacity-60 ',
-						$page.url.pathname === item.href ? 'bg-muted' : 'hover:bg-muted/50'
+						$page.url.pathname === item.href
+							? 'text-blue-600 dark:text-blue-500'
+							: 'hover:underline'
 					)}
 					target={item.external ? '_blank' : ''}
 					rel={item.external ? 'noreferrer' : ''}

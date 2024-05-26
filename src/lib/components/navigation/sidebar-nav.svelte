@@ -6,7 +6,7 @@
 
 {#if items.length}
 	<aside
-		class="fixed top-16 z-30 hidden h-[calc(100vh-3.5rem)] w-full shrink-0 overflow-y-auto border-r border-border md:sticky md:block"
+		class="fixed top-10 z-30 hidden h-[calc(100vh-3.5rem)] w-full shrink-0 overflow-y-auto border-r border-border md:sticky md:block"
 	>
 		<div class="h-full py-6 pr-4 lg:py-8">
 			<nav class="space-y-3">

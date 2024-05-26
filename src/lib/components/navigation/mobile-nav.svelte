@@ -27,7 +27,7 @@
 			<div class="flex flex-col space-y-2">
 				{#each navigation.sidebar as navItem, index (index)}
 					<div class="flex flex-col space-y-3 pt-6">
-						<!-- <h4 class="font-medium">{navItem.title}</h4> -->
+						<h4 class="font-medium">{navItem.title}</h4>
 						{#if navItem?.items?.length}
 							{#each navItem.items as item}
 								{#if !item.disabled && item.href}

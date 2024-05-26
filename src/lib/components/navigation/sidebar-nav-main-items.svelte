@@ -14,7 +14,9 @@
 					href={item.href}
 					class={cn(
 						'group flex w-full items-center gap-2.5 rounded-md px-2.5 py-1.5 text-sm font-semibold text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-background',
-						$page.url.pathname === item.href ? 'bg-muted' : 'bg-transparent hover:bg-muted/50'
+						$page.url.pathname === item.href
+							? 'text-blue-600 dark:text-blue-500'
+							: 'hover:underline'
 					)}
 					target={item.external ? '_blank' : ''}
 					rel={item.external ? 'noreferrer' : ''}

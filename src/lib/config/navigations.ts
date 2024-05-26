@@ -32,7 +32,7 @@ export const navigation: Navigation = {
 			items: [
 				{
 					title: 'Introduction',
-					href: '/',
+					href: '/guide/index',
 					items: []
 				}
 			]
