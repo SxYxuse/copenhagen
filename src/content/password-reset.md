@@ -5,13 +5,6 @@ published: true
 
 # Password reset
 
-## Table of contents
-
-- [Overview](#overview)
-- [Password reset links](#password-reset-links)
-- [Error handling](#error-handling)
-- [Rate limiting](#rate-limiting)
-
 ## Overview
 
 A common approach to password reset is to use the user's email address. The user enters their email and, if the email is valid, a password reset link is sent to the mailbox. This requires each user to have a unique email address - see the [Email verification](/email-verification) guide.

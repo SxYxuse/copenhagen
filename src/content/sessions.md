@@ -5,18 +5,6 @@ published: true
 
 # Sessions
 
-## Table of contents
-
-- [Overview](#overview)
-- [Session lifetime](#session-lifetime)
-  - [Sudo mode](#sudo-mode)
-- [Session hijacking](#session-hijacking)
-- [Session invalidation](#session-invalidation)
-- [Client storage](#client-storage)
-  - [Cookies](#cookies)
-  - [Web Storage API](#web-storage-api)
-- [Session fixation attacks](#session-fixation-attacks)
-
 ## Overview
 
 Throughout a user's visit to your website, they will make multiple requests to your server. If you need to persist state, such as user preference, across those requests, HTTP doesn't provide a mechanism for it. It's a stateless protocol.

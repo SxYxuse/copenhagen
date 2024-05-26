@@ -5,16 +5,6 @@ published: true
 
 # Multi-factor authentication (MFA)
 
-## Table of contents
-
-- [Overview](#overview)
-- [Time-based one-time passwords (TOTP)](#time-based-one-time-passwords-totp)
-  - [Generate QR code](#generate-qr-code)
-  - [Validate OTPs](#validate-otps)
-- [SMS](#sms)
-- [Passkeys](#passkeys)
-- [Recovery codes](#recovery-codes)
-
 ## Overview
 
 MFA is when a user is required to input more than just a password to authenticate. There are mainly 5 types of factors:

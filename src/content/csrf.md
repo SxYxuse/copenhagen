@@ -5,16 +5,6 @@ published: true
 
 # Cross-site request forgery (CSRF)
 
-## Table of contents
-
-- [Overview](#overview)
-  - [Cross-site vs cross-origin](#cross-site-vs-cross-origin)
-- [Prevention](#prevention)
-  - [Anti-CSRF tokens](#anti-csrf-tokens)
-  - [Signed double-submit cookies](#signed-double-submit-cookies)
-  - [Origin header](#origin-header)
-- [SameSite cookie attribute](#samesite-cookie-attribute)
-
 ## Overview
 
 CSRF attacks allow an attacker to make authenticated requests on behalf of users when credentials are stored in cookies.

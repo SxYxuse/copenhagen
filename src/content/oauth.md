@@ -5,17 +5,6 @@ published: true
 
 # OAuth
 
-## Table of contents
-
-- [Overview](#overview)
-- [Create authorization URL](#create-authorization-url)
-- [Validate authorization code](#validate-authorization-code)
-- [Proof key for code exchange (PKCE)](#proof-key-for-code-exchange-pkce-flow)
-- [OpenID Connect (OIDC)](#openid-connect-oidc)
-  - [OpenID Connect Discovery](#openid-connect-discovery)
-- [Account linking](#account-linking)
-- [Other considerations](#other-considerations)
-
 ## Overview
 
 OAuth is a widely used protocol for authorization. It's what's behind "Sign in with Google" and "Sign in with GitHub." It allows users to grant access to their resources on an external service, like Google, to your application without sharing their credentials. Instead of implementing a password-based auth, we can replace it with OAuth to let a third-party service handle authentication. You can then get the user's profile and use that to create users and sessions.

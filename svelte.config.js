@@ -1,14 +1,13 @@
+import { preprocessMeltUI, sequence } from '@melt-ui/pp';
 import adapter from '@sveltejs/adapter-node';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
-
 import { mdsx } from 'mdsx';
 import { mdsxConfig } from './mdsx.config.js';
-
-/** @type {import('@sveltejs/kit').Config} */
+/** @type {import('@sveltejs/kit').Config}*/
 const config = {
 	// Consult https://kit.svelte.dev/docs/integrations#preprocessors
 	// for more information about preprocessors
-	preprocess: [mdsx(mdsxConfig), vitePreprocess()],
+	preprocess: [mdsx(mdsxConfig), sequence([vitePreprocess(), preprocessMeltUI()])],
 	extensions: ['.svelte', '.md'],
 	kit: {
 		// adapter-auto only supports some environments, see https://kit.svelte.dev/docs/adapter-auto for a list.
@@ -17,5 +16,4 @@ const config = {
 		adapter: adapter()
 	}
 };
-
 export default config;

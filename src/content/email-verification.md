@@ -7,15 +7,6 @@ published: true
 
 If your application requires user email addresses to be unique, email verification is a must. It discourages users from entering a random email address and, if password reset is implemented, allows users to take back accounts created with their email address. You may even want to block users from accessing your application's content until they verify their email address.
 
-## Table of contents
-
-- [Input validation](#input-validation)
-  - [Sub-addressing](#sub-addressing)
-- [Email verification codes](#email-verification-codes)
-- [Email verification links](#email-verification-links)
-- [Changing emails](#changing-emails)
-- [Rate limiting](#rate-limiting)
-
 ## Input validation
 
 Emails are complex and cannot be fully validated using Regex. Attempting to use Regex may also introduce [ReDoS vulnerabilities](https://owasp.org/www-community/attacks/Regular_expression_Denial_of_Service_-_ReDoS). Do not over-complicate it:

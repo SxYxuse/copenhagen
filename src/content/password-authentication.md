@@ -5,18 +5,6 @@ published: true
 
 # Password authentication
 
-## Table of contents
-
-- [Input validation](#input-validation)
-  - [Checking for compromised passwords](#checking-for-compromised-passwords)
-- [Password storage](#password-storage)
-  - [Argon2id](#argon2id)
-  - [Scrypt](#scrypt)
-  - [Bcrypt](#bcrypt)
-- [Brute-force attacks](#brute-force-attacks)
-- [Error handling](#error-handling)
-- [Other considerations](#other-considerations)
-
 ## Input validation
 
 - Passwords must be at least 8 characters long.

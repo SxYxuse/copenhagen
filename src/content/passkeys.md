@@ -5,13 +5,6 @@ published: true
 
 # Passkeys
 
-## Table of contents
-
-- [Overview](#overview)
-- [Challenge](#challenge)
-- [Registration](#registration)
-- [Authentication](#authentication)
-
 ## Overview
 
 Passkeys are built on top of the [Web Authentication (WebAuthn) standard](https://www.w3.org/TR/webauthn-2/) and allow applications to authenticate users with in-device authentication methods, including biometrics and device pin-code. It can be more secure than traditional passwords as it doesn't require the user to remember their passwords. It can replace passwords entirely or be used in addition to passwords as a [second factor](/mfa).

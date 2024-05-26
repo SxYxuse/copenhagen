@@ -5,12 +5,6 @@ published: true
 
 # Server-side tokens
 
-## Table of contents
-
-- [Overview](#overview)
-- [Generating tokens](#generating-tokens)
-- [Storing tokens](#storing-tokens)
-
 ## Overview
 
 A "server-side token" is any long, random string that is stored on the server. It may be persisted in a database or in-memory data store (e.g. Redis) and is used for authentication and verification. A token can be validated by checking if it exists in storage. Examples include session IDs, email verification tokens, and access tokens.
