@@ -1,18 +1,22 @@
 <script lang="ts">
-	import { createTableOfContents } from "@melt-ui/svelte";
-	import Tree from "./tree.svelte";
+	import { createTableOfContents } from '@melt-ui/svelte';
+	import Tree from './tree.svelte';
 
-	export let selector = "#content";
+	type Props = {
+		selector?: string;
+	};
+
+	let { selector = '#content' }: Props = $props();
 
 	const {
 		elements: { item },
 		states: { headingsTree, activeHeadingIdxs },
-		helpers: { isActive },
+		helpers: { isActive }
 	} = createTableOfContents({
 		selector,
-		exclude: ["h1", "h4", "h5", "h6"],
-		activeType: "all",
-		scrollOffset: 80,
+		exclude: ['h1', 'h4', 'h5', 'h6'],
+		activeType: 'all',
+		scrollOffset: 80
 	});
 </script>
 

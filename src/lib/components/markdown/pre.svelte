@@ -1,9 +1,15 @@
 <script lang="ts">
 	import { cn, createCopyCodeButton } from '$lib/utils';
+	import type { Snippet } from 'svelte';
 	import { CopyCodeButton } from '..';
 
-	let className: string | undefined | null = undefined;
-	export { className as class };
+	type Props = {
+		class?: string | undefined | null;
+		restProps?: SvelteRestProps;
+		children: Snippet;
+	};
+
+	let { class: className = undefined, children, ...restProps }: Props = $props();
 
 	const { copyCode, copied, setCodeString } = createCopyCodeButton();
 </script>
@@ -14,7 +20,7 @@
 		className
 	)}
 	use:setCodeString
-	{...$$restProps}>
-	<slot />
+	{...restProps}>
+	{@render children()}
 	<CopyCodeButton {copyCode} copied={$copied} class={cn('pre-copy-btn absolute right-4 top-4')} />
 </pre>

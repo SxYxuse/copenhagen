@@ -1,6 +1,5 @@
 ---
 title: 'Sessions'
-published: true
 ---
 
 # Sessions
@@ -25,7 +24,9 @@ However, for less critical websites, such as a social media app, it would be ann
 
 You can also combine both approaches. For example, you can set the expiration to an hour and extend it every 30 minutes but set an absolute expiration of 12 hours so sessions won't last for longer than that.
 
-```go
+<!-- go -->
+
+```untype
 const sessionExpiresIn = 30 * 24 * time.Hour
 
 func validateSession(sessionId string) (*Session, error) {

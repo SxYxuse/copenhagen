@@ -1,13 +1,19 @@
 <script lang="ts">
 	import { cn } from '$lib/utils';
+	import type { Snippet } from 'svelte';
 
-	let className: string | undefined | null = undefined;
-	export { className as class };
-	export let href: string;
-	$: internal = href.startsWith('/') || href.startsWith('#');
+	type Props = {
+		href: string;
+		class?: string | undefined | null;
+		restProps?: SvelteRestProps;
+		children: Snippet;
+	};
 
-	$: rel = !internal ? 'noopener noreferrer' : undefined;
-	$: target = !internal ? '_blank' : undefined;
+	let { href, class: className = undefined, children, ...restProps }: Props = $props();
+
+	let internal = $derived(href.startsWith('/') || href.startsWith('#'));
+	let rel = $derived(!internal ? 'noopener noreferrer' : undefined);
+	let target = $derived(!internal ? '_blank' : undefined);
 </script>
 
 <a
@@ -15,7 +21,7 @@
 	{target}
 	{rel}
 	class={cn('link text-blue-600 dark:text-blue-500', className)}
-	{...$$restProps}
+	{...restProps}
 >
-	<slot />
+	{@render children()}
 </a>

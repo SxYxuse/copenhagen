@@ -3,7 +3,11 @@
 	import type { SidebarNavItem } from '$lib/config/index.js';
 	import { cn } from '$lib/utils';
 
-	export let items: SidebarNavItem[] = [];
+	type Props = {
+		items: SidebarNavItem[];
+	};
+
+	let { items = [] }: Props = $props();
 </script>
 
 {#if items.length}

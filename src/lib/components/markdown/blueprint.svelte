@@ -18,13 +18,13 @@
 		td,
 		th,
 		tr,
-		ul,
-	} from "$lib/components/markdown/index.js";
+		ul
+	} from '$lib/components/markdown/index.js';
 </script>
 
 <script lang="ts">
-	export let title = "";
-	export let description = "";
+	export let title = '';
+	export let description = '';
 </script>
 
 <slot {title} {description} />

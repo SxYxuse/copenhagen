@@ -1,19 +1,30 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { cn } from '$lib/utils';
+	import type { Snippet } from 'svelte';
 
-	export let href: string;
-	export let open: boolean;
+	type Props = {
+		href: string;
+		open: boolean;
+		class?: string | undefined | null;
+		restProps?: SvelteRestProps;
+		children: Snippet;
+	};
 
-	let className: string | undefined | null = undefined;
-	export { className as class };
+	let {
+		href,
+		open = $bindable(),
+		class: className = undefined,
+		restProps,
+		children
+	}: Props = $props();
 </script>
 
 <a
 	{href}
-	on:click={() => (open = false)}
+	onclick={() => (open = false)}
 	class={cn($page.url.pathname === href ? 'text-foreground' : 'text-foreground/60', className)}
-	{...$$restProps}
+	{...restProps}
 >
-	<slot />
+	{@render children()}
 </a>

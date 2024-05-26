@@ -1,6 +1,5 @@
 ---
 title: 'OAuth'
-published: true
 ---
 
 # OAuth
@@ -42,7 +41,9 @@ You can define a `scope` parameter to request access to additional resources. If
 
 You can create a "Sign in" button by adding a link to the login endpoint.
 
-```html
+<!-- html -->
+
+```untype
 <a href="/login/github">Sign in with GitHub</a>
 ```
 
@@ -72,7 +73,9 @@ grant_type=authorization_code
 
 If your OAuth provider uses a client secret, it should be base64 encoded with the client ID and secret included in the Authorization header (HTTP basic authorization scheme).
 
-```go
+<!-- go -->
+
+```untype
 var clientId, clientSecret string
 credentials := base64.StdEncoding.EncodeToString([]byte(clientId + ":" + clientSecret))
 ```
@@ -109,7 +112,9 @@ PKCE can replace state entirely, as both protect against CSRF attacks, but it ma
 
 A new code verifier must be generated on each request. It should be generated using a cryptographically secure random generator and have at least 112 bits of entropy (256 bits recommended by the RFC). Similar to state, your application must keep track of the code verifier associated with each attempt (using cookies or sessions). A base64url (no padding) encoded SHA256 hash of it called a code challenge is included in the authorization URL.
 
-```go
+<!-- go -->
+
+```untype
 var codeVerifier string
 codeChallengeBuf := sha256.Sum256([]byte(codeVerifier))
 codeChallenge := base64.URLEncoding.WithPadding(base64.NoPadding).EncodeToString(codeChallengeBuf)
@@ -167,7 +172,9 @@ https://accounts.google.com/.well-known/openid-configuration
 
 The endpoint will return a JSON object containing the OpenID Provider's configuration, including the endpoint URLs for authorization, token exchange, and user info retrieval.
 
-```json
+<!-- json -->
+
+```untype
 {
 	"issuer": "https://example.com",
 	"authorization_endpoint": "https://example.com/oauth2/authorize",
@@ -187,4 +194,4 @@ Account linking allows users to sign in with any of their social accounts and be
 
 ## Other considerations
 
-- [Open redirect](/open-redirect).
+- [Open redirect](/content/open-redirect)

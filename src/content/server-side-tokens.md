@@ -1,6 +1,5 @@
 ---
 title: 'Server-side tokens'
-published: true
 ---
 
 # Server-side tokens
@@ -31,7 +30,9 @@ Tokens should be case-sensitive, but you may want to constrain your token genera
 
 > For a 120 bit token, it would take someone 2 quintillion years before they guess a valid token if they generate 10,000 tokens per second and there are 1,000,000 valid tokens in the system.
 
-```go
+<!-- go -->
+
+```untype
 import (
 	"crypto/rand"
 	"encoding/base32"

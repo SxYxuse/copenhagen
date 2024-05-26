@@ -1,6 +1,5 @@
 ---
 title: 'Cross-site request forgery (CSRF)'
-published: true
 ---
 
 # Cross-site request forgery (CSRF)
@@ -13,7 +12,9 @@ When a client makes a cross-origin request, the browser sends a preflight reques
 
 For example, if you are signed into `bank.com`, your session cookie will be sent alongside this form submission even if the form is hosted on a different domain.
 
-```html
+<!-- html -->
+
+```untype
 <form action="https://bank.com/send-money" method="post">
 	<input name="recipient" value="attacker" />
 	<input name="value" value="$100" />
@@ -23,7 +24,9 @@ For example, if you are signed into `bank.com`, your session cookie will be sent
 
 This can just be a `fetch()` request so no user input is required.
 
-```ts
+<!-- ts -->
+
+```untype
 const body = new URLSearchParams();
 body.set('recipient', 'attacker');
 body.set('value', '$100');
@@ -50,7 +53,9 @@ For the common token-based approach, the token should not be single-use (e.g. a 
 
 This is a very simple method where each session has a unique CSRF [token](/server-side-tokens) associated with it.
 
-```html
+<!-- html -->
+
+```untype
 <form method="post">
 	<input name="message" />
 	<input type="hidden" name="__csrf" value="<CSRF_TOKEN>" />
@@ -64,7 +69,9 @@ If storing the token server-side is not an option, using signed double-submit co
 
 A new [token](/server-side-tokens) is generated and hashed with HMAC SHA-256 using a secret key.
 
-```go
+<!-- go -->
+
+```untype
 func generateCSRFToken() (string, []byte) {
 	buffer := [10]byte{}
 	crypto.rand.Read(buffer)
@@ -96,7 +103,9 @@ A very simple way to prevent CSRF attacks is to check the `Origin` header of the
 
 While the `Origin` header can be spoofed by using a custom client, the important part is that it can't be done using client-side JavaScript. Users are only vulnerable to CSRF when using a browser.
 
-```go
+<!-- go -->
+
+```untype
 func handleRequest(w http.ResponseWriter, request *http.Request) {
   	if request.Method != "GET" {
 		originHeader := request.Header.Get()

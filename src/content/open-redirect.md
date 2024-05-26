@@ -1,6 +1,5 @@
 ---
 title: 'Open redirect'
-published: true
 ---
 
 # Open redirect

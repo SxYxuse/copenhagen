@@ -2,11 +2,14 @@
 	import { cn } from '$lib/utils';
 	import { Icons } from './icons';
 
-	let className: string | undefined | null = undefined;
+	type Props = {
+		copyCode: () => void;
+		copied?: boolean;
+		class: string | undefined | null;
+		restProps?: SvelteRestProps;
+	};
 
-	export let copyCode: () => void;
-	export let copied = false;
-	export { className as class };
+	let { copyCode, copied = false, class: className = undefined, ...restProps }: Props = $props();
 </script>
 
 <button
@@ -14,9 +17,9 @@
 		'relative z-20 inline-flex h-9 w-9 items-center justify-center rounded-md text-sm font-medium text-muted-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-background',
 		className
 	)}
-	on:click={copyCode}
+	onclick={copyCode}
 	aria-label="Copy"
-	{...$$restProps}
+	{...restProps}
 	data-copy-code
 >
 	{#if copied}

@@ -1,6 +1,5 @@
 ---
 title: 'The Copenhagen Book'
-published: false
 ---
 
 # The Copenhagen Book

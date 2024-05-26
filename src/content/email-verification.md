@@ -1,6 +1,5 @@
 ---
 title: 'Email verification'
-published: true
 ---
 
 # Email verification

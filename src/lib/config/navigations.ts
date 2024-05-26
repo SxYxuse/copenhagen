@@ -32,67 +32,67 @@ export const navigation: Navigation = {
 			items: [
 				{
 					title: 'Introduction',
-					href: '/guide/index',
+					href: '/content/index',
 					items: []
 				}
 			]
 		},
 		{
-			title: 'Guide',
+			title: 'content',
 			items: [
 				{
 					title: 'Server-side tokens',
-					href: '/guide/server-side-tokens',
+					href: '/content/server-side-tokens',
 					items: []
 				},
 				{
 					title: 'Sessions',
-					href: '/guide/sessions',
+					href: '/content/sessions',
 					items: []
 				},
 				{
 					title: 'Password authentication',
-					href: '/guide/password-authentication',
+					href: '/content/password-authentication',
 					items: []
 				},
 				{
 					title: 'Email verification',
-					href: '/guide/email-verification',
+					href: '/content/email-verification',
 					items: []
 				},
 				{
 					title: 'Password reset',
-					href: '/guide/password-reset',
+					href: '/content/password-reset',
 					items: []
 				},
 				{
 					title: 'Generating random values',
-					href: '/guide/random-values',
+					href: '/content/random-values',
 					items: []
 				},
 				{
 					title: 'OAuth',
-					href: '/guide/oauth',
+					href: '/content/oauth',
 					items: []
 				},
 				{
 					title: 'Multi-factor authentication (MFA)',
-					href: '/guide/mfa',
+					href: '/content/mfa',
 					items: []
 				},
 				{
 					title: 'Passkeys',
-					href: '/guide/passkeys',
+					href: '/content/passkeys',
 					items: []
 				},
 				{
 					title: 'Cross-site request forgery (CSRF)',
-					href: '/guide/csrf',
+					href: '/content/csrf',
 					items: []
 				},
 				{
 					title: 'Open redirect',
-					href: '/guide/open-redirect',
+					href: '/content/open-redirect',
 					items: []
 				}
 			]

@@ -1,6 +1,5 @@
 ---
 title: 'Password authentication'
-published: true
 ---
 
 # Password authentication
@@ -53,7 +52,9 @@ Another option is peppering where you use a secret key when hashing the password
 
 When comparing password hashes, use constant time comparison instead of `==`. This ensures your application is not vulnerable to timing-based attacks, where an attacker can extract information using how long it took to compare the password with the hash.
 
-```go
+<!-- go -->
+
+```untype
 import (
 	"crypto/subtle"
 	"golang.org/x/crypto/argon2"

@@ -1,6 +1,5 @@
 ---
 title: 'Password reset'
-published: true
 ---
 
 # Password reset

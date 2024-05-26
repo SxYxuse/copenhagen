@@ -1,8 +1,12 @@
 <script lang="ts">
 	import { cn } from '$lib/utils';
 
-	let className: string | undefined | null = undefined;
-	export { className as class };
+	type Props = {
+		class?: string | undefined | null;
+		restProps?: SvelteRestProps;
+	};
+
+	let { class: className = undefined, ...restProps }: Props = $props();
 </script>
 
-<hr class={cn('my-4 md:my-8', className)} {...$$restProps} />
+<hr class={cn('my-4 md:my-8', className)} {...restProps} />

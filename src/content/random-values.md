@@ -1,6 +1,5 @@
 ---
 title: 'Generating random values'
-published: true
 ---
 
 # Generating random values
@@ -15,7 +14,9 @@ This page describes how to generate random strings and numbers from randomly gen
 
 The easiest and safest way to generate random strings is to generate random bytes and encode them with base16 (hex), base32, or base64 encoding schemes.
 
-```go
+<!-- go -->
+
+```untype
 import (
 	"crypto/rand"
 	"encoding/base32"
@@ -32,7 +33,9 @@ func generateRandomString() string {
 
 If the character set length fits with an existing encoding scheme (e.g. base64), you can customize the characters used.
 
-```go
+<!-- go -->
+
+```untype
 import (
 	"crypto/rand"
 	"encoding/base32"
@@ -49,7 +52,9 @@ func generateRandomString() string {
 
 If not, you would need a high-quality [random number generator](#random-integers) to generate an integer within a custom range.
 
-```go
+<!-- go -->
+
+```untype
 const alphabet = "abcdefg"
 
 func generateRandomString() string {
@@ -65,7 +70,9 @@ func generateRandomString() string {
 
 If the range is a power of 2 (2, 4, 8, 16 etc), a simple bit masking will do the trick.
 
-```go
+<!-- go -->
+
+```untype
 bytes := make([]byte, 1)
 rand.Read(bytes)
 value := bytes[0] & 0x03 // random value between [0, 3]
@@ -73,7 +80,9 @@ value := bytes[0] & 0x03 // random value between [0, 3]
 
 For a custom range, a simple approach is to generate a very large random number compared to the maximum and use the modulo operator. Since this introduces [a modulo bias](#biases), the random integer must be sufficiently large. For example, if the maximum was 10 and we generated 32 random bits, the bias would be around 1/250,000,000 - which can be good enough for most use cases.
 
-```go
+<!-- go -->
+
+```untype
 import (
 	"crypto/rand"
 	"encoding/binary"
@@ -92,7 +101,9 @@ func generateRandomUint32(max uint32): uint32 {
 
 Another common approach is to multiply our maximum with a random float. This can also [introduce a bias](#biases) but it can be fine if the maximum is small enough and, unlike our first approach, the bias is spread out.
 
-```go
+<!-- go -->
+
+```untype
 func generateRandomUint32(max uint32): uint32 {
 	var max uint32 = 10
 	return uint32(max * generateRandomFloat32())
@@ -101,7 +112,9 @@ func generateRandomUint32(max uint32): uint32 {
 
 The safest approach then is to use rejection sampling, where a random value is repeatedly generated until it's under the maximum. To increase the likelihood the random value is under the maximum, we can only generate the maximum number of bits required to represent the maximum. For example, if the maximum is 10, we would only have to generate 4 bits. In the code below, we're generating a random byte and then masking the 4 leading bits to get 4 random bits (8-4=4).
 
-```go
+<!-- go -->
+
+```untype
 import (
 	"crypto/rand"
 	"math/big"
@@ -131,7 +144,9 @@ func generateRandomUint64(max *big.Int) uint64 {
 
 A common approach is to generate a random integer and divide it by a very big number. When doing this, it is crucial that the denominator is large enough, and that the denominator is a power of 2 to be accurately represented by float64.
 
-```go
+<!-- go -->
+
+```untype
 func generateRandomFloat64() float64 {
 	return float64(generateRandomInteger(1<<53)) / (1 << 53)
 }
@@ -139,7 +154,9 @@ func generateRandomFloat64() float64 {
 
 Another approach is to generate 52 random bits for the mantissa (float64) and convert that into a float within [0, 1). This will be generally faster since it avoids division.
 
-```go
+<!-- go -->
+
+```untype
 import (
 	"crypto/rand"
 	"math"

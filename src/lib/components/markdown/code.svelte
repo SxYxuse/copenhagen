@@ -1,7 +1,13 @@
 <script lang="ts">
 	import { cn } from '$lib/utils';
-	let className: string | undefined | null = undefined;
-	export { className as class };
+	import type { Snippet } from 'svelte';
+
+	type Props = {
+		class?: string | undefined | null;
+		children: Snippet;
+	};
+
+	let { class: className = undefined, children }: Props = $props();
 </script>
 
 <code
@@ -11,5 +17,5 @@
 		'custom'
 	)}
 >
-	<slot />
+	{@render children()}
 </code>
