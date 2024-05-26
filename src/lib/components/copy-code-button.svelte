@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { cn } from '$lib/utils';
+	import { toast } from 'svelte-sonner';
 	import { Icons } from './icons';
 
 	type Props = {
@@ -10,6 +11,12 @@
 	};
 
 	let { copyCode, copied = false, class: className = undefined, ...restProps }: Props = $props();
+
+	$effect(() => {
+		if (copied) {
+			toast.success('Copied to clipboard', { duration: 2500 });
+		}
+	});
 </script>
 
 <button

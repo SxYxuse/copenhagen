@@ -6,7 +6,7 @@ title: 'Password reset'
 
 ## Overview
 
-A common approach to password reset is to use the user's email address. The user enters their email and, if the email is valid, a password reset link is sent to the mailbox. This requires each user to have a unique email address - see the [Email verification](/email-verification) guide.
+A common approach to password reset is to use the user's email address. The user enters their email and, if the email is valid, a password reset link is sent to the mailbox. This requires each user to have a unique email address - see the [Email verification](/content/email-verification) guide.
 
 The email does not need to be verified before sending a reset link. You should even mark a user's email address as verified if they reset their password.
 
@@ -20,7 +20,7 @@ Password reset requires 2 pages. First is the page where users enter their email
 https://example.com/reset-password
 ```
 
-Next is the actual password reset form, where the user enters their new password. This is the link that gets sent to the user's mailbox. A password reset [token](/server-side-tokens) is included as part of the URL path.
+Next is the actual password reset form, where the user enters their new password. This is the link that gets sent to the user's mailbox. A password reset [token](/content/server-side-tokens) is included as part of the URL path.
 
 ```untype
 https://example.com/reset-password/<TOKEN>
@@ -32,11 +32,11 @@ The token must be single-use. Delete the token when the user sends a valid passw
 
 Make sure to set the [Referrer Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy) tag to `no-referrer` for any path that includes tokens to protect the tokens from referer leakage.
 
-If the user has implemented [multi-factor authentication](/mfa), such as via authenticator apps or passkeys, they should be prompted to authenticate using their second factor before entering their new password.
+If the user has implemented [multi-factor authentication](/content/mfa), such as via authenticator apps or passkeys, they should be prompted to authenticate using their second factor before entering their new password.
 
 ## Error handling
 
-If the email is invalid, you can either tell the user that the email is invalid or keep the message vague (e.g. "We'll send a reset email if the account exists"). This will depend on whether you'd want to keep the validity of emails public or private. See [Error handling](/password-authentication#error-handling) in the Password authentication guide for more information.
+If the email is invalid, you can either tell the user that the email is invalid or keep the message vague (e.g. "We'll send a reset email if the account exists"). This will depend on whether you'd want to keep the validity of emails public or private. See [Error handling](/content/password-authentication#error-handling) in the Password authentication guide for more information.
 
 ## Rate limiting
 

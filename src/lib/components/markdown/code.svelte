@@ -12,7 +12,7 @@
 
 <code
 	class={cn(
-		'relative inline-flex h-[27px] items-center justify-center rounded-button bg-muted px-[8px] font-mono text-xs font-medium tracking-tighter text-foreground/60 sm:text-sm',
+		'relative inline-flex h-[27px] items-center justify-center bg-muted px-[8px] font-mono text-xs font-medium tracking-tighter text-foreground/60 sm:text-sm',
 		className,
 		'custom'
 	)}

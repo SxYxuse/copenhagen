@@ -36,7 +36,7 @@ All sessions of a user should be invalidated when their email is verified.
 
 ## Email verification links
 
-An alternative way to verify emails is to use a verification link that contains a long, random, single-use [token](/server-side-tokens).
+An alternative way to verify emails is to use a verification link that contains a long, random, single-use [token](/content/server-side-tokens).
 
 ```untype
 https://example.com/verify-email/<TOKEN>
@@ -50,7 +50,7 @@ All sessions should be invalidated when the email is verified (and create a new 
 
 ## Changing emails
 
-The user should be asked for their password, or if [multi-factor authentication](/mfa) is enabled, authenticated with one of their second factors. The new email should be stored separately from the current email until it's verified. For example, the new email could be stored with the verification token/code.
+The user should be asked for their password, or if [multi-factor authentication](/content/mfa) is enabled, authenticated with one of their second factors. The new email should be stored separately from the current email until it's verified. For example, the new email could be stored with the verification token/code.
 
 A notification should be sent to the previous email address when the user changes their email.
 

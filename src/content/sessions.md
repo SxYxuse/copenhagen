@@ -10,7 +10,7 @@ Throughout a user's visit to your website, they will make multiple requests to y
 
 Sessions are a way to persist state in the server. It is especially useful for managing the authentication state, such as the client's identity. We can assign each session with a unique ID and store it on the server to use it as a token. Then the client can associate the request with a session by sending the session ID with it. To implement authentication, we can simply store user data alongside the session.
 
-It's important that the session ID is sufficiently long and random, or else someone could impersonate other users by just guessing their session IDs. See the [Server-side tokens](/server-side-tokens) guide for generating secure session IDs. Session IDs can be hashed before storage to provide an extra level of security.
+It's important that the session ID is sufficiently long and random, or else someone could impersonate other users by just guessing their session IDs. See the [Server-side tokens](/content/server-side-tokens) guide for generating secure session IDs. Session IDs can be hashed before storage to provide an extra level of security.
 
 Depending on your application, you may only have to manage sessions for authenticated users, or for both authenticated and unauthenticated users. You can even manage 2 different kinds of sessions - one for auth and another for non-auth related state.
 

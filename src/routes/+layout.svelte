@@ -8,6 +8,7 @@
 	import { navigation } from '$lib/config';
 	import { Header } from '$lib/components';
 	import { TableOfContents } from '$lib/components/toc';
+	import { Toaster } from 'svelte-sonner';
 
 	type Props = {
 		children: Snippet;
@@ -17,6 +18,8 @@
 </script>
 
 <ModeWatcher />
+
+<Toaster richColors />
 
 <Header />
 
