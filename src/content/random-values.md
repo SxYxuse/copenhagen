@@ -78,7 +78,7 @@ rand.Read(bytes)
 value := bytes[0] & 0x03 // valeur aléatoire entre [0, 3]
 ```
 
-Pour une plage personnalisée, une approche simple consiste à générer un très grand nombre aléatoire par rapport au maximum et à utiliser l'opérateur modulo. Étant donné que cela introduit [un biais de modulo](#biais), l'entier aléatoire doit être suffisamment grand. Par exemple, si le maximum était 10 et que nous avons généré 32 bits aléatoires, le biais serait d'environ 1/250,000,000 - ce qui peut être suffisant pour la plupart des cas d'utilisation.
+Pour une plage personnalisée, une approche simple consiste à générer un très grand nombre aléatoire par rapport au maximum et à utiliser l'opérateur modulo. Étant donné que cela introduit [un biais de modulo](#biases), l'entier aléatoire doit être suffisamment grand. Par exemple, si le maximum était 10 et que nous avons généré 32 bits aléatoires, le biais serait d'environ 1/250,000,000 - ce qui peut être suffisant pour la plupart des cas d'utilisation.
 
 <!-- go -->
 
