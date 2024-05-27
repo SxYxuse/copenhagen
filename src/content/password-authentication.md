@@ -115,7 +115,9 @@ IP-based throttling should always be implemented. A basic example is to block al
 
 Another layer of security you can implement is bot detection using tests like Captchas.
 
-Finally, ensure a certain strength of passwords for users. Make sure passwords aren't weak and that they haven't been part of previous leaks. See the [Password validation](#password-validation) section.
+Finally, ensure a certain strength of passwords for users. Make sure passwords aren't weak and that they haven't been part of previous leaks.
+
+<!-- See the [Password validation](#password-validation) section. -->
 
 ## Error handling
 

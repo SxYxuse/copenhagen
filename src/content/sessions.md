@@ -79,7 +79,7 @@ Session cookies should have the following attributes:
 - `Max-Age` or `Expires`: Must be defined to persist cookies
 - `Path=/`: Cookies can be accessed from all routes
 
-[CSRF protection](/csrf) must be implemented when using cookies, and using the `SameSite` flag is not sufficient. Using cookies does not automatically protect your users from cross-site scripting attacks (XSS) as well. While the session ID can't be read directly, authenticated requests can still be made as browsers automatically include cookies in requests.
+[CSRF protection](/content/csrf) must be implemented when using cookies, and using the `SameSite` flag is not sufficient. Using cookies does not automatically protect your users from cross-site scripting attacks (XSS) as well. While the session ID can't be read directly, authenticated requests can still be made as browsers automatically include cookies in requests.
 
 The maximum expiration for a cookie is anywhere between 1 and 2 years. If you plan for the session to be long-lived, continuously set the cookie on a set interval (e.g. when you extend the session expiration).
 
