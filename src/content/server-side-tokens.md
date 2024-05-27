@@ -4,9 +4,9 @@ title: 'Server-side tokens'
 
 # Server-side tokens
 
-## Overview
+## Vue d'ensemble
 
-A "server-side token" is any long, random string that is stored on the server. It may be persisted in a database or in-memory data store (e.g. Redis) and is used for authentication and verification. A token can be validated by checking if it exists in storage. Examples include session IDs, email verification tokens, and access tokens.
+Un "Server-side token" est une chaîne longue et aléatoire qui est stockée sur le serveur. Il peut être persisté dans une base de données ou un stockage de données en mémoire (par exemple Redis) et est utilisé pour l'authentification et la vérification. Un jeton peut être validé en vérifiant s'il existe dans le stockage. Les exemples incluent les identifiants de session, les jetons de vérification d'e-mail et les jetons d'accès.
 
 ```untype
 CREATE TABLE token (
@@ -18,17 +18,17 @@ CREATE TABLE token (
 )
 ```
 
-For single-use tokens, any retrieval should also guarantee deletion. In SQL for example, an atomic operation such as a transaction should be used when fetching a token.
+Pour les jetons à usage unique, toute récupération doit également garantir la suppression. Par exemple, en SQL, une opération atomique telle qu'une transaction doit être utilisée lors de la récupération d'un jeton.
 
-## Generating tokens
+## Génération de jetons
 
-Tokens should have at least 112 bits of entropy (120-256 is a good range). For example, you could generate 15 random bytes and encode it with base32 to get a 24-character token. If you generate tokens by choosing random characters one by one, you should ensure a similar level of entropy. See the [Generating random values](/content/random-values) page for more information.
+Les jetons doivent avoir au moins 112 bits d'entropie (120-256 est une bonne plage). Par exemple, vous pouvez générer 15 octets aléatoires et les encoder en base32 pour obtenir un jeton de 24 caractères. Si vous générez des jetons en choisissant des caractères aléatoires un par un, vous devez vous assurer d'un niveau d'entropie similaire. Consultez la page [Génération de valeurs aléatoires](/content/random-values) pour plus d'informations.
 
-Tokens must be generated using a cryptographically secure random generator. Fast, pseudo-random generators like those generally provided by standard math packages should be avoided for this.
+Les jetons doivent être générés à l'aide d'un générateur de nombres aléatoires cryptographiquement sécurisé. Les générateurs rapides et pseudo-aléatoires, comme ceux généralement fournis par les packages mathématiques standard, doivent être évités à cet effet.
 
-Tokens should be case-sensitive, but you may want to constrain your token generation to lowercase letters if your storage is case-insensitive (e.g. MySQL).
+Les jetons doivent être sensibles à la casse, mais vous voudrez peut-être limiter la génération de vos jetons à des lettres minuscules si votre stockage est insensible à la casse (par exemple, MySQL).
 
-> For a 120 bit token, it would take someone 2 quintillion years before they guess a valid token if they generate 10,000 tokens per second and there are 1,000,000 valid tokens in the system.
+> Pour un jeton de 120 bits, il faudrait à quelqu'un 2 quintillions d'années avant de deviner un jeton valide s'ils génèrent 10 000 jetons par seconde et qu'il y a 1 000 000 de jetons valides dans le système.
 
 <!-- go -->
 
@@ -43,10 +43,10 @@ rand.Read(bytes)
 sessionId := base32.StdEncoding.EncodeToString(bytes)
 ```
 
-UUID v4 may fit these requirements (122 bits of entropy), but keep in mind that UUID v4 is space inefficient and the spec does not guarantee the use of a cryptographically secure random generator.
+UUID v4 peut répondre à ces exigences (122 bits d'entropie), mais gardez à l'esprit que UUID v4 est inefficace en termes d'espace et que la spécification ne garantit pas l'utilisation d'un générateur aléatoire cryptographiquement sécurisé.
 
-## Storing tokens
+## Stockage des jetons
 
-Tokens that require an extra level of security, such as password reset tokens, should be hashed with SHA-256. SHA-256 can be used instead of a slower algorithm here as the token is sufficiently long and random. Tokens can be validated by hashing the incoming token before querying.
+Les jetons qui nécessitent un niveau de sécurité supplémentaire, tels que les jetons de réinitialisation de mot de passe, doivent être hachés avec SHA-256. SHA-256 peut être utilisé à la place d'un algorithme plus lent ici car le jeton est suffisamment long et aléatoire. Les jetons peuvent être validés en hachant le jeton entrant avant la requête.
 
-Real-life examples of accidental leaks include [Paleohacks](https://www.vpnmentor.com/blog/report-paleohacks-breach/) and [Spoutible](https://www.troyhunt.com/how-spoutibles-leaky-api-spurted-out-a-deluge-of-personal-data/).
+Les exemples concrets de fuites accidentelles incluent [Paleohacks](https://www.vpnmentor.com/blog/report-paleohacks-breach/) and [Spoutible](https://www.troyhunt.com/how-spoutibles-leaky-api-spurted-out-a-deluge-of-personal-data/).
