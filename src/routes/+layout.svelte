@@ -6,7 +6,7 @@
 	import { cn } from '$lib/utils';
 	import { SidebarNav } from '$lib/components/navigation';
 	import { navigation } from '$lib/config';
-	import { Header } from '$lib/components';
+	import { Header, Metadata } from '$lib/components';
 	import { TableOfContents } from '$lib/components/toc';
 	import { Toaster } from 'svelte-sonner';
 
@@ -18,6 +18,8 @@
 </script>
 
 <ModeWatcher />
+
+<Metadata />
 
 <Toaster richColors />
 
