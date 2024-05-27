@@ -1,5 +1,6 @@
 export const prerender = true;
 
+import { dev } from '$app/environment';
 import { inject } from '@vercel/analytics';
 
-inject();
+inject({ mode: dev ? 'development' : 'production' });
