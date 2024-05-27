@@ -99,7 +99,7 @@ func generateRandomUint32(max uint32): uint32 {
 }
 ```
 
-Une autre approche courante consiste à multiplier notre maximum par un nombre flottant aléatoire. Cela peut également [introduire un biais](#biais) mais cela peut être acceptable si le maximum est assez petit et, contrairement à notre première approche, le biais est réparti.
+Une autre approche courante consiste à multiplier notre maximum par un nombre flottant aléatoire. Cela peut également [introduire un biais](#biases) mais cela peut être acceptable si le maximum est assez petit et, contrairement à notre première approche, le biais est réparti.
 
 <!-- go -->
 
