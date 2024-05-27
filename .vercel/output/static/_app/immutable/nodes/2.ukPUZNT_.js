@@ -1,0 +1,1 @@
+import{R as o}from"../chunks/control.CYgJF_JY.js";function n(e,t){throw new o(e,t.toString())}new TextEncoder;const r=async()=>{n(303,"/content/index")},i=Object.freeze(Object.defineProperty({__proto__:null,load:r},Symbol.toStringTag,{value:"Module"}));export{i as universal};

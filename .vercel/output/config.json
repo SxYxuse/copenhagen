@@ -1,0 +1,195 @@
+{
+	"version": 3,
+	"routes": [
+		{
+			"src": "/",
+			"headers": {
+				"Location": "/content/index"
+			},
+			"status": 303
+		},
+		{
+			"src": "/content/index",
+			"dest": "/content/index/"
+		},
+		{
+			"src": "/content/index/",
+			"status": 308,
+			"headers": {
+				"Location": "/content/index"
+			}
+		},
+		{
+			"src": "/content/server-side-tokens",
+			"dest": "/content/server-side-tokens/"
+		},
+		{
+			"src": "/content/server-side-tokens/",
+			"status": 308,
+			"headers": {
+				"Location": "/content/server-side-tokens"
+			}
+		},
+		{
+			"src": "/content/sessions",
+			"dest": "/content/sessions/"
+		},
+		{
+			"src": "/content/sessions/",
+			"status": 308,
+			"headers": {
+				"Location": "/content/sessions"
+			}
+		},
+		{
+			"src": "/content/password-authentication",
+			"dest": "/content/password-authentication/"
+		},
+		{
+			"src": "/content/password-authentication/",
+			"status": 308,
+			"headers": {
+				"Location": "/content/password-authentication"
+			}
+		},
+		{
+			"src": "/content/email-verification",
+			"dest": "/content/email-verification/"
+		},
+		{
+			"src": "/content/email-verification/",
+			"status": 308,
+			"headers": {
+				"Location": "/content/email-verification"
+			}
+		},
+		{
+			"src": "/content/password-reset",
+			"dest": "/content/password-reset/"
+		},
+		{
+			"src": "/content/password-reset/",
+			"status": 308,
+			"headers": {
+				"Location": "/content/password-reset"
+			}
+		},
+		{
+			"src": "/content/random-values",
+			"dest": "/content/random-values/"
+		},
+		{
+			"src": "/content/random-values/",
+			"status": 308,
+			"headers": {
+				"Location": "/content/random-values"
+			}
+		},
+		{
+			"src": "/content/oauth",
+			"dest": "/content/oauth/"
+		},
+		{
+			"src": "/content/oauth/",
+			"status": 308,
+			"headers": {
+				"Location": "/content/oauth"
+			}
+		},
+		{
+			"src": "/content/mfa",
+			"dest": "/content/mfa/"
+		},
+		{
+			"src": "/content/mfa/",
+			"status": 308,
+			"headers": {
+				"Location": "/content/mfa"
+			}
+		},
+		{
+			"src": "/content/passkeys",
+			"dest": "/content/passkeys/"
+		},
+		{
+			"src": "/content/passkeys/",
+			"status": 308,
+			"headers": {
+				"Location": "/content/passkeys"
+			}
+		},
+		{
+			"src": "/content/csrf",
+			"dest": "/content/csrf/"
+		},
+		{
+			"src": "/content/csrf/",
+			"status": 308,
+			"headers": {
+				"Location": "/content/csrf"
+			}
+		},
+		{
+			"src": "/content/open-redirect",
+			"dest": "/content/open-redirect/"
+		},
+		{
+			"src": "/content/open-redirect/",
+			"status": 308,
+			"headers": {
+				"Location": "/content/open-redirect"
+			}
+		},
+		{
+			"src": "/_app/immutable/.+",
+			"headers": {
+				"cache-control": "public, immutable, max-age=31536000"
+			}
+		},
+		{
+			"handle": "filesystem"
+		},
+		{
+			"src": "/.*",
+			"dest": "/fn"
+		}
+	],
+	"overrides": {
+		"content/index.html": {
+			"path": "content/index"
+		},
+		"content/server-side-tokens.html": {
+			"path": "content/server-side-tokens"
+		},
+		"content/sessions.html": {
+			"path": "content/sessions"
+		},
+		"content/password-authentication.html": {
+			"path": "content/password-authentication"
+		},
+		"content/email-verification.html": {
+			"path": "content/email-verification"
+		},
+		"content/password-reset.html": {
+			"path": "content/password-reset"
+		},
+		"content/random-values.html": {
+			"path": "content/random-values"
+		},
+		"content/oauth.html": {
+			"path": "content/oauth"
+		},
+		"content/mfa.html": {
+			"path": "content/mfa"
+		},
+		"content/passkeys.html": {
+			"path": "content/passkeys"
+		},
+		"content/csrf.html": {
+			"path": "content/csrf"
+		},
+		"content/open-redirect.html": {
+			"path": "content/open-redirect"
+		}
+	}
+}
