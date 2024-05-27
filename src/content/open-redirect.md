@@ -1,21 +1,21 @@
 ---
-title: 'Open redirect'
+title: 'Redirection ouverte'
 ---
 
-# Open redirect
+# Redirection ouverte
 
-Open redirect is a vulnerability where your application allows a user to control a redirect.
+La redirection ouverte est une vulnérabilité où votre application permet à un utilisateur de contrôler une redirection.
 
-For example, you may want to redirect the user back to their original page after they sign in. To achieve this, you add a `redirect_to` URL query parameter to the login page and form. When a user signs in, the user is redirected to the location defined in `redirect_to`.
+Par exemple, vous pouvez vouloir rediriger l'utilisateur vers sa page d'origine après qu'il se soit connecté. Pour ce faire, vous ajoutez un paramètre d'URL `redirect_to` à la page et au formulaire de connexion. Lorsqu'un utilisateur se connecte, il est redirigé vers l'emplacement défini dans `redirect_to`.
 
 ```untype
 https://example.com/login?redirect_to=%2Fhome
 ```
 
-But what if you accept any redirect location without validating it?
+Mais que se passe-t-il si vous acceptez n'importe quel emplacement de redirection sans le valider ?
 
 ```untype
 https://example.com/login?redirect_to=https%3A%2F%2Fscam.com
 ```
 
-This may seem harmless at first, but it makes it significantly easier to scam users. The user could be redirected to an identical site made by an attacker and be prompted to enter their password again.
+Cela peut sembler inoffensif au début, mais cela facilite grandement l'escroquerie des utilisateurs. L'utilisateur pourrait être redirigé vers un site identique créé par un attaquant et être invité à saisir son mot de passe à nouveau.

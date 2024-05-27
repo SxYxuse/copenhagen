@@ -4,25 +4,25 @@ title: 'Sessions'
 
 # Sessions
 
-## Overview
+## Vue d'ensemble
 
-Throughout a user's visit to your website, they will make multiple requests to your server. If you need to persist state, such as user preference, across those requests, HTTP doesn't provide a mechanism for it. It's a stateless protocol.
+Tout au long de la visite d'un utilisateur sur votre site web, il effectuera plusieurs requêtes à votre serveur. Si vous devez maintenir un état persistant, comme les préférences utilisateur, entre ces requêtes, HTTP ne fournit pas de mécanisme pour cela. C'est un protocole sans état.
 
-Sessions are a way to persist state in the server. It is especially useful for managing the authentication state, such as the client's identity. We can assign each session with a unique ID and store it on the server to use it as a token. Then the client can associate the request with a session by sending the session ID with it. To implement authentication, we can simply store user data alongside the session.
+Les sessions sont un moyen de persister l'état sur le serveur. Elles sont particulièrement utiles pour gérer l'état d'authentification, comme l'identité du client. Nous pouvons attribuer à chaque session un ID unique et le stocker sur le serveur pour l'utiliser comme jeton. Ensuite, le client peut associer la requête à une session en envoyant l'ID de session avec celle-ci. Pour implémenter l'authentification, nous pouvons simplement stocker les données utilisateur avec la session.
 
-It's important that the session ID is sufficiently long and random, or else someone could impersonate other users by just guessing their session IDs. See the [Server-side tokens](/content/server-side-tokens) guide for generating secure session IDs. Session IDs can be hashed before storage to provide an extra level of security.
+Il est important que l'ID de session soit suffisamment long et aléatoire, sinon quelqu'un pourrait usurper l'identité d'autres utilisateurs en devinant simplement leurs IDs de session. Consultez le guide [Server-side tokens](/content/server-side-tokens) pour générer des IDs de session sécurisés. Les IDs de session peuvent être hachés avant le stockage pour fournir un niveau supplémentaire de sécurité.
 
-Depending on your application, you may only have to manage sessions for authenticated users, or for both authenticated and unauthenticated users. You can even manage 2 different kinds of sessions - one for auth and another for non-auth related state.
+Selon votre application, vous pouvez avoir à gérer des sessions uniquement pour les utilisateurs authentifiés, ou pour les utilisateurs authentifiés et non authentifiés. Vous pouvez même gérer deux types de sessions différents - une pour l'authentification et une autre pour l'état non lié à l'authentification.
 
-## Session lifetime
+## Durée de vie des sessions
 
-If you only manage sessions for authenticated users, a new session is created whenever a user signs in. If you plan to manage session for non-authenticated users as well, sessions should be automatically created when an incoming request doesn't include a valid session. Make sure you don't make your application vulnerable to [session fixation attacks](#session-fixation-attacks).
+Si vous ne gérez que des sessions pour les utilisateurs authentifiés, une nouvelle session est créée chaque fois qu'un utilisateur se connecte. Si vous prévoyez de gérer des sessions pour les utilisateurs non authentifiés également, des sessions doivent être automatiquement créées lorsqu'une requête entrante ne comprend pas une session valide. Assurez-vous de ne pas rendre votre application vulnérable aux [attaques de fixations de session](#session-fixation-attacks).
 
-For security-critical applications, it is crucial for sessions to expire automatically. This minimizes the time an attacker has to hijack sessions. The expiration should match how long the user is expected to use your application in a single sitting.
+Pour les applications critiques en matière de sécurité, il est crucial que les sessions expirent automatiquement. Cela minimise le temps dont dispose un attaquant pour détourner des sessions. L'expiration doit correspondre à la durée pendant laquelle l'utilisateur est censé utiliser votre application en une seule session.
 
-However, for less critical websites, such as a social media app, it would be annoying for users if they had to sign in every single day. A good practice here is to set the expiration to a reasonable time, like 30 days, but extend the expiration whenever the session is used. For example, sessions may expire in 30 days by default, but the expiration gets pushed back 30 days when it's used within 15 days before expiration. This effectively invalidates sessions for inactive users, while keeping active users signed in.
+Cependant, pour les sites web moins critiques, comme une application de médias sociaux, il serait ennuyeux pour les utilisateurs de devoir se connecter chaque jour. Une bonne pratique ici est de fixer l'expiration à une durée raisonnable, comme 30 jours, mais de prolonger l'expiration chaque fois que la session est utilisée. Par exemple, les sessions peuvent expirer par défaut dans 30 jours, mais l'expiration est repoussée de 30 jours lorsqu'elles sont utilisées dans les 15 jours avant l'expiration. Cela invalide efficacement les sessions des utilisateurs inactifs, tout en gardant les utilisateurs actifs connectés.
 
-You can also combine both approaches. For example, you can set the expiration to an hour and extend it every 30 minutes but set an absolute expiration of 12 hours so sessions won't last for longer than that.
+Vous pouvez également combiner les deux approches. Par exemple, vous pouvez fixer l'expiration à une heure et la prolonger toutes les 30 minutes, mais définir une expiration absolue de 12 heures pour que les sessions ne durent pas plus longtemps que cela.
 
 <!-- go -->
 
@@ -45,56 +45,56 @@ func validateSession(sessionId string) (*Session, error) {
 }
 ```
 
-### Sudo mode
+### Mode sudo
 
-An alternative to short-lived sessions is to implement long-lived sessions coupled with sudo mode. Sudo mode allows authenticated users to access security-critical components for a limited time by re-authenticating with one of their credentials (passwords, passkeys, TOTP, etc). A simple way to implement this is by keeping track of when the user last used their credentials in each session. This approach provides the security benefits of short-lived sessions without annoying frequent users. This can also help against [session hijacking](#session-hijacking).
+Une alternative aux sessions de courte durée est d'implémenter des sessions de longue durée couplées avec le mode sudo. Le mode sudo permet aux utilisateurs authentifiés d'accéder à des composants critiques pour la sécurité pendant une période limitée en se réauthentifiant avec l'une de leurs informations d'identification (mot de passe, clé d'accès, TOTP, etc.). Une façon simple de mettre en œuvre cela est de suivre le moment où l'utilisateur a utilisé ses informations d'identification pour la dernière fois dans chaque session. Cette approche offre les avantages de sécurité des sessions de courte durée sans ennuyer les utilisateurs fréquents. Cela peut également aider à lutter contre le [détournement de session](#session-hijacking).
 
-## Session hijacking
+## Détournement de session
 
-Session hijacking is another word for stealing sessions. Common attacks include XSS, man-in-the-middle (MITM), and session sniffing. MITM attacks are especially hard to mitigate since it's ultimately up to the users to protect their device and network. Still, there are some ways to protect your users.
+Le détournement de session est un autre terme pour le vol de sessions. Les attaques courantes incluent le cross-site scripting (XSS), les attaques de type man-in-the-middle (MITM) et le sniffing de session. Les attaques MITM sont particulièrement difficiles à atténuer car il incombe finalement aux utilisateurs de protéger leur appareil et leur réseau. Néanmoins, il existe quelques moyens de protéger vos utilisateurs.
 
-First, consider tracking the user agent (device) and IP address linked to the session to detect suspicious requests. IP addresses can be dynamic for mobile users so you may want to keep track of the general area (country) instead of the specific address. Limiting the number of sessions connected to a user based on these information is also a good safeguard.
+Tout d'abord, envisagez de suivre l'agent utilisateur (appareil) et l'adresse IP liés à la session pour détecter les requêtes suspectes. Les adresses IP peuvent être dynamiques pour les utilisateurs mobiles, il peut donc être préférable de suivre la zone générale (pays) plutôt que l'adresse spécifique. Limiter le nombre de sessions connectées à un utilisateur en fonction de ces informations est également une bonne protection.
 
-Since IP addresses and request headers can be easily spoofed, however, implementing [sudo mode](#sudo-mode) is recommended for any security-critical applications.
+Étant donné que les adresses IP et les en-têtes de requête peuvent être facilement usurpés, il est recommandé d'implémenter le [mode sudo](#sudo-mode) pour toutes les applications critiques en matière de sécurité.
 
-## Session invalidation
+## Invalidation des sessions
 
-Sessions can be invalidated by deleting it from both server and client storage.
+Les sessions peuvent être invalidées en les supprimant du stockage côté serveur et côté client.
 
-When the user signs out, invalidate the current session, or for security-critical applications, invalidate all sessions belonging to that user.
+Lorsqu'un utilisateur se déconnecte, invalidez la session en cours, ou pour les applications critiques en matière de sécurité, invalidez toutes les sessions appartenant à cet utilisateur.
 
-All sessions of the user should also be invalidated when they gain new permissions (email verification, new role, etc) or change passwords.
+Toutes les sessions de l'utilisateur doivent également être invalidées lorsqu'il obtient de nouveaux droits (vérification de l'email, nouveau rôle, etc.) ou change de mot de passe.
 
-## Client storage
+## Stockage côté client
 
-The client should store the session ID in the user's device to be used for subsequent requests. The browser mainly provides 2 ways to store data - cookies and the Web Storage API. Cookies should be preferred for websites as they're automatically included in requests by the browser.
+Le client doit stocker l'ID de session sur l'appareil de l'utilisateur pour être utilisé lors des requêtes suivantes. Le navigateur fournit principalement 2 moyens de stocker les données - les cookies et l'API Web Storage. Les cookies doivent être préférés pour les sites web car ils sont automatiquement inclus dans les requêtes par le navigateur.
 
 ### Cookies
 
-Session cookies should have the following attributes:
+Les cookies de session doivent avoir les attributs suivants :
 
-- `HttpOnly`: Cookies are only accessible server-side
-- `SameSite=Lax`: Use `Strict` for critical websites
-- `Secure`: Cookies can only be sent over HTTPS
-- `Max-Age` or `Expires`: Must be defined to persist cookies
-- `Path=/`: Cookies can be accessed from all routes
+- `HttpOnly`: Les cookies sont accessibles uniquement côté serveur
+- `SameSite=Lax`: Utilisez `Strict` pour les sites critiques
+- `Secure`: Les cookies ne peuvent être envoyés que via HTTPS
+- `Max-Age` ou `Expires`: Doit être défini pour persister les cookies
+- `Path=/`: Les cookies peuvent être accessibles depuis toutes les routes
 
-[CSRF protection](/content/csrf) must be implemented when using cookies, and using the `SameSite` flag is not sufficient. Using cookies does not automatically protect your users from cross-site scripting attacks (XSS) as well. While the session ID can't be read directly, authenticated requests can still be made as browsers automatically include cookies in requests.
+La [protection CSRF](/content/csrf) doit être implémentée lors de l'utilisation de cookies, et l'utilisation du drapeau `SameSite` ne suffit pas. L'utilisation de cookies ne protège pas automatiquement vos utilisateurs contre les attaques cross-site scripting (XSS) non plus. Bien que l'ID de session ne puisse pas être lu directement, des requêtes authentifiées peuvent toujours être effectuées car les navigateurs incluent automatiquement les cookies dans les requêtes.
 
-The maximum expiration for a cookie is anywhere between 1 and 2 years. If you plan for the session to be long-lived, continuously set the cookie on a set interval (e.g. when you extend the session expiration).
+L'expiration maximale pour un cookie est comprise entre 1 et 2 ans. Si vous prévoyez que la session soit de longue durée, définissez continuellement le cookie à un intervalle défini (par exemple, lorsque vous prolongez l'expiration de la session).
 
-`Lax` should be preferred over `Strict` for the `SameSite` attribute as using `Strict` will cause the browser to not send the session cookie when the user visits your application via an external link.
+`Lax` doit être préféré à `Strict` pour l'attribut `SameSite` car l'utilisation de`Strict` empêchera le navigateur d'envoyer le cookie de session lorsque l'utilisateur visite votre application via un lien externe.
 
-### Web Storage API
+### Stockage Web API
 
-Another option is to store session IDs inside `localStorage` or `sessionStorage`. If your website has an XSS vulnerability, this will allow attackers to directly read and steal the user's session ID. It is especially vulnerable to supply chain attacks since tokens can be stolen by just reading the entire local storage, without using any application-specific exploits.
+Une autre option est de stocker les IDs de session dans `localStorage` ou `sessionStorage`. Si votre site web a une vulnérabilité XSS, cela permettra aux attaquants de lire directement et de voler l'ID de session de l'utilisateur. Il est particulièrement vulnérable aux attaques de la chaîne d'approvisionnement, car les jetons peuvent être volés en lisant simplement l'ensemble du stockage local, sans utiliser d'exploits spécifiques à l'application.
 
-Session tokens can be sent with the request using the `Authorization` header for example. Do not send them inside URLs as query parameters or inside form data, nor should tokens sent in this manner be accepted.
+Les jetons de session peuvent être envoyés avec la requête en utilisant l'en-tête `Authorization` par exemple. Ne les envoyez pas dans les URLs comme paramètres de requête ou dans les données de formulaire, ni les jetons envoyés de cette manière ne doivent être acceptés.
 
-## Session fixation attacks
+## Attaques de fixation de session
 
-Applications that maintain sessions for both authenticated and unauthenticated users and reuse the current session when a user signs in are vulnerable to session fixation attacks.
+Les applications qui maintiennent des sessions pour les utilisateurs authentifiés et non authentifiés et réutilisent la session en cours lorsqu'un utilisateur se connecte sont vulnérables aux attaques de fixation de session.
 
-Say an application allows the session ID to be sent inside the URL as a query parameter. If an attacker shares a link to the sign-in page with a session ID already included and the user signs in, the attacker now has a valid session ID to impersonate that user. A similar attack can be done if the application accepts session IDs in forms or cookies, though the latter requires an XSS vulnerability to exploit.
+Disons qu'une application permet que l'ID de session soit envoyé dans l'URL comme paramètre de requête. Si un attaquant partage un lien vers la page de connexion avec un ID de session déjà inclus et que l'utilisateur se connecte, l'attaquant a maintenant un ID de session valide pour usurper cet utilisateur. Une attaque similaire peut être effectuée si l'application accepte les IDs de session dans les formulaires ou les cookies, bien que ce dernier nécessite une vulnérabilité XSS pour être exploité.
 
-This can be avoided by always creating a new session when the user signs in and only accepting session IDs via cookies and request headers.
+Cela peut être évité en créant toujours une nouvelle session lorsque l'utilisateur se connecte et en acceptant uniquement les IDs de session via des cookies et des en-têtes de requête.

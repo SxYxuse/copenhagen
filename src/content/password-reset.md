@@ -1,43 +1,43 @@
 ---
-title: 'Password reset'
+title: 'Réinitialisation de mot de passe'
 ---
 
-# Password reset
+# Réinitialisation de mot de passe
 
-## Overview
+## Vue d'ensemble
 
-A common approach to password reset is to use the user's email address. The user enters their email and, if the email is valid, a password reset link is sent to the mailbox. This requires each user to have a unique email address - see the [Email verification](/content/email-verification) guide.
+Une approche courante pour la réinitialisation de mot de passe consiste à utiliser l'adresse e-mail de l'utilisateur. L'utilisateur saisit son adresse e-mail et, si l'e-mail est valide, un lien de réinitialisation de mot de passe est envoyé à la boîte aux lettres. Cela nécessite que chaque utilisateur ait une adresse e-mail unique - consultez le guide de [Vérification d'e-mail](/content/email-verification).
 
-The email does not need to be verified before sending a reset link. You should even mark a user's email address as verified if they reset their password.
+L'e-mail n'a pas besoin d'être vérifié avant d'envoyer un lien de réinitialisation. Vous devriez même marquer l'adresse e-mail d'un utilisateur comme vérifiée s'ils réinitialisent leur mot de passe.
 
-This page will only cover password reset links as it is the most common approach.
+Cette page ne couvrira que les liens de réinitialisation de mot de passe car c'est l'approche la plus courante.
 
-## Password reset links
+## Liens de réinitialisation de mot de passe
 
-Password reset requires 2 pages. First is the page where users enter their email address.
+La réinitialisation de mot de passe nécessite 2 pages. La première est la page où les utilisateurs saisissent leur adresse e-mail.
 
 ```untype
 https://example.com/reset-password
 ```
 
-Next is the actual password reset form, where the user enters their new password. This is the link that gets sent to the user's mailbox. A password reset [token](/content/server-side-tokens) is included as part of the URL path.
+Ensuite, c'est le formulaire de réinitialisation de mot de passe proprement dit, où l'utilisateur saisit son nouveau mot de passe. C'est le lien qui est envoyé à la boîte aux lettres de l'utilisateur. Un [jeton](/content/server-side-tokens) de réinitialisation de mot de passe est inclus dans le chemin d'URL.
 
 ```untype
 https://example.com/reset-password/<TOKEN>
 ```
 
-Tokens should be valid for around an hour, and 24 hours at most. Invalidate existing tokens when sending another token, or reuse an existing valid token if one already exists. It's recommended to hash tokens with SHA-256 before storing them.
+Les jetons doivent être valides pendant environ une heure, et au plus 24 heures. Invalidez les jetons existants lors de l'envoi d'un autre jeton, ou réutilisez un jeton valide existant s'il en existe déjà un. Il est recommandé de hacher les jetons avec SHA-256 avant de les stocker.
 
-The token must be single-use. Delete the token when the user sends a valid password through the form.
+Le jeton doit être à usage unique. Supprimez le jeton lorsque l'utilisateur envoie un mot de passe valide via le formulaire.
 
-Make sure to set the [Referrer Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy) tag to `no-referrer` for any path that includes tokens to protect the tokens from referer leakage.
+Assurez-vous de définir la balise [Politique de référent](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy) sur `no-referrer` pour tout chemin qui inclut des jetons afin de protéger les jetons contre les fuites de référents.
 
-If the user has implemented [multi-factor authentication](/content/mfa), such as via authenticator apps or passkeys, they should be prompted to authenticate using their second factor before entering their new password.
+Si l'utilisateur a mis en œuvre [l'authentification multi-facteurs](/content/mfa), par exemple via des applications d'authentification ou des passkeys, il devrait être invité à s'authentifier en utilisant son deuxième facteur avant de saisir son nouveau mot de passe.
 
-## Error handling
+## Gestion des erreurs
 
-If the email is invalid, you can either tell the user that the email is invalid or keep the message vague (e.g. "We'll send a reset email if the account exists"). This will depend on whether you'd want to keep the validity of emails public or private. See [Error handling](/content/password-authentication#error-handling) in the Password authentication guide for more information.
+Si l'e-mail est invalide, vous pouvez soit dire à l'utilisateur que l'e-mail est invalide, soit garder le message vague (par exemple, "Nous enverrons un e-mail de réinitialisation si le compte existe"). Cela dépendra de si vous souhaitez rendre la validité des e-mails publique ou privée. Voir [Gestion des erreurs](/content/password-authentication#error-handling) dans le guide d'authentification par mot de passe pour plus d'informations.
 
-## Rate limiting
+## Limitation du débit
 
-Any endpoint that can send emails should have strict rate limiting implemented. Use Captchas if necessary.
+Tout point de terminaison pouvant envoyer des e-mails devrait avoir une limitation stricte du débit mise en œuvre. Utilisez des Captchas si nécessaire.

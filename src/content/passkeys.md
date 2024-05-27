@@ -2,25 +2,23 @@
 title: 'Passkeys'
 ---
 
-# Passkeys
+# Clés d'accès
 
-## Overview
+## Vue d'ensemble
 
-Passkeys are built on top of the [Web Authentication (WebAuthn) standard](https://www.w3.org/TR/webauthn-2/) and allow applications to authenticate users with in-device authentication methods, including biometrics and device pin-code. It can be more secure than traditional passwords as it doesn't require the user to remember their passwords. It can replace passwords entirely or be used in addition to passwords as a [second factor](/content/mfa).
+Les clés d'accès sont basées sur le standard [Web Authentication (WebAuthn)](https://www.w3.org/TR/webauthn-2/) et permettent aux applications d'authentifier les utilisateurs via des méthodes d'authentification intégrées dans les appareils, y compris les biométries et les codes PIN. Elles peuvent être plus sécurisées que les mots de passe traditionnels car elles ne nécessitent pas que l'utilisateur se souvienne de ses mots de passe. Elles peuvent remplacer complètement les mots de passe ou être utilisées en plus des mots de passe comme [second facteur](/content/mfa).
 
-Passkeys are based on public key cryptography, where each user has a public-private key pair. The private key is stored in the user's device, while the public key is stored in your application. The device creates a signature with the private key and your application can use the public key to verify it.
+Les clés d'accès sont basées sur la cryptographie à clé publique, où chaque utilisateur possède une paire de clés publique-privée. La clé privée est stockée dans l'appareil de l'utilisateur, tandis que la clé publique est stockée dans votre application. L'appareil crée une signature avec la clé privée et votre application peut utiliser la clé publique pour la vérifier.
 
-## Challenge
+## Défi
 
-Each attestation and assertion has a challenge associated with it. A challenge is a randomly generated single-use [token](/content/server-side-tokens) stored in the server to prevent replay attacks. The recommended minimum entropy is 16 bytes.
+Chaque attestation et assertion est associée à un défi. Un défi est un [jeton](/content/server-side-tokens) à usage unique généré aléatoirement et stocké sur le serveur pour empêcher les attaques de relecture. L'entropie minimale recommandée est de 16 octets.
 
-## Registration
+## Enregistrement
 
-In the client, get a new challenge from the server and create a new credential with the [Web Authentication API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Authentication_API). This will prompt the user to authenticate with their device. Browsers such as Safari will only allow you to call this method if it was initiated by a user interaction (button click).
+Sur le client, obtenez un nouveau défi du serveur et créez un nouvel identifiant avec l'[API Web Authentication](https://developer.mozilla.org/fr/docs/Web/API/Web_Authentication_API). Cela invite l'utilisateur à s'authentifier avec son appareil. Les navigateurs comme Safari ne permettront d'appeler cette méthode que si elle a été initiée par une interaction utilisateur (clic sur un bouton).
 
-<!-- ts -->
-
-```untype
+```typescript
 const publicKeyCredential: PublicKeyCredential = await navigator.credentials.create({
 	publicKey: {
 		rp: { name: 'My app' },
@@ -32,7 +30,7 @@ const publicKeyCredential: PublicKeyCredential = await navigator.credentials.cre
 		pubKeyCredParams: [
 			{
 				type: 'public-key',
-				// ECDSA with SHA-256
+				// ECDSA avec SHA-256
 				alg: -7
 			}
 		],
@@ -47,20 +45,18 @@ const authenticatorData: ArrayBuffer = response.getAuthenticatorData();
 const credentialId: string = publicKeyCredential.id;
 ```
 
-- `rp.name`: Your application's name
-- `user.id`: Random ID
-- `user.name`: Unique user identifier (user ID, username, email)
-- `user.displayName`: Does not need to be unique
+- `rp.name` : Le nom de votre application
+- `user.id` : ID aléatoire
+- `user.name` : Identifiant unique de l'utilisateur (ID utilisateur, nom d'utilisateur, e-mail)
+- `user.displayName` : Ne doit pas nécessairement être unique
 
-The algorithm ID is from the [IANA COSE Algorithms registry](https://www.iana.org/assignments/cose/cose.xhtml). ECDSA with SHA-256 (ES256) is recommended as it is widely supported. You can also pass `-257` for RSASSA-PKCS1-v1_5 (RS256) to support a wider range of devices but devices that only support it are rare.
+L'ID de l'algorithme est tiré du [registre IANA des algorithmes COSE](https://www.iana.org/assignments/cose/cose.xhtml). L'ECDSA avec SHA-256 (ES256) est recommandé car il est largement supporté. Vous pouvez également passer `-257` pour RSASSA-PKCS1-v1_5 (RS256) pour prendre en charge une gamme plus large d'appareils, bien que les appareils ne supportant que celui-ci soient rares.
 
-The public key, client data, authenticator data, credential ID, and the challenge are sent to the server for verification. A simple way to send binary data is by encoding it with base64.
+La clé publique, les données du client, les données de l'authentificateur, l'ID de l'identifiant et le défi sont envoyés au serveur pour vérification. Une façon simple d'envoyer des données binaires est de les encoder en base64.
 
-The first step is to validate the challenge. Make sure to delete the challenge from storage as it is single-use. Next, check the client data and authenticator data. The origin is the domain your application is hosted on, including the protocol and port, and the relying party ID is the domain without the protocol or port.
+La première étape consiste à valider le défi. Assurez-vous de supprimer le défi du stockage car il est à usage unique. Ensuite, vérifiez les données du client et de l'authentificateur. L'origine est le domaine sur lequel votre application est hébergée, y compris le protocole et le port, et l'ID de la partie de confiance est le domaine sans le protocole ni le port.
 
-<!-- go -->
-
-```untype
+```go
 import (
 	"bytes"
 	"crypto/sha256"
@@ -71,7 +67,7 @@ import (
 
 var challenge []byte
 
-// Verify the challenge and delete it from storage.
+// Vérifiez le défi et supprimez-le du stockage.
 
 var publicKey, clientDataJSON, authenticatorData []byte
 var credentialId string
@@ -80,26 +76,26 @@ var clientData ClientData
 json.Unmarshal(clientDataJSON, &clientData)
 
 if clientData.Type != "webauthn.create" {
-	return errors.New("invalid type")
+	return errors.New("type invalide")
 }
 if clientData.Challenge != base64.URLEncoding.WithPadding(base64.NoPadding).EncodeToString(challenge) {
-	return errors.New("invalid challenge")
+	return errors.New("défi invalide")
 }
 if clientData.Origin != "https://example.com" {
-	return errors.New("invalid origin")
+	return errors.New("origine invalide")
 }
 
 if len(authenticatorData) < 37 {
-	return errors.New("invalid authenticator data")
+	return errors.New("données de l'authentificateur invalides")
 }
 rpIdHash := authenticatorData[0:32]
 expectedRpIdHash := sha256.Sum256([]byte("example.com"))
 if bytes.Equal(rpIdHash, expectedRpIdHash[:]) {
-	return errors.New("invalid relying party ID")
+	return errors.New("ID de la partie de confiance invalide")
 }
-// Check for the "user present" flag.
+// Vérifiez le drapeau "utilisateur présent".
 if (authenticatorData[32] & 1) != 1 {
-	return errors.New("invalid flag")
+	return errors.New("drapeau invalide")
 }
 
 type ClientData struct {
@@ -109,19 +105,17 @@ type ClientData struct {
 }
 ```
 
-Optionally, validate the attestation statement to verify that the attestation came from a legitimate device. However, unless your application has strict security or needs to verify the authenticity of the user's device, this is likely unnecessary.
+Optionnellement, validez l'énoncé d'attestation pour vérifier que l'attestation provient d'un appareil légitime. Cependant, à moins que votre application n'ait des exigences de sécurité strictes ou doive vérifier l'authenticité de l'appareil de l'utilisateur, cela est probablement inutile.
 
-The authenticator data also includes a signature counter that is incremented every time a new signature is generated, which can be used to detect cloned authenticators. However, for passkeys specifically, this is not necessary as credentials are designed to be exported and shared.
+Les données de l'authentificateur incluent également un compteur de signatures qui est incrémenté à chaque nouvelle signature générée, ce qui peut être utilisé pour détecter les authentificateurs clonés. Cependant, pour les clés d'accès en particulier, cela n'est pas nécessaire car les identifiants sont conçus pour être exportés et partagés.
 
-Finally, check if the public key is valid, and create a new user with their public key and the credential ID. The public key is in the SubjectPublicKeyInfo format. If you support multiple algorithms, you can parse the public key to get the algorithm identifier.
+Enfin, vérifiez si la clé publique est valide et créez un nouvel utilisateur avec sa clé publique et l'ID de l'identifiant. La clé publique est au format SubjectPublicKeyInfo. Si vous supportez plusieurs algorithmes, vous pouvez analyser la clé publique pour obtenir l'identifiant de l'algorithme.
 
-## Authentication
+## Authentification
 
-Generate a challenge on the server and use it to authenticate the user client side.
+Générez un défi sur le serveur et utilisez-le pour authentifier l'utilisateur côté client.
 
-<!-- ts -->
-
-```untype
+```typescript
 const publicKeyCredential: PublicKeyCredential = await navigator.credentials.get({
 	publicKey: {
 		challenge
@@ -129,17 +123,15 @@ const publicKeyCredential: PublicKeyCredential = await navigator.credentials.get
 });
 
 const response: AuthenticatorAssertionResponse = publicKeyCredential.response;
-const clientDataJSON: ArrayBuffer = response.clientDataJSON);
-const authenticatorData: ArrayBuffer = response.authenticatorData);
-const signature: ArrayBuffer = response.signature);
+const clientDataJSON: ArrayBuffer = response.clientDataJSON;
+const authenticatorData: ArrayBuffer = response.authenticatorData;
+const signature: ArrayBuffer = response.signature;
 const credentialId: string = publicKeyCredential.id;
 ```
 
-The client data, authenticator data, signature, challenge, and credential ID are sent to the server. The challenge, the authenticator, and the client data are first verified. This part is nearly identical to the steps for verifying attestation.
+Les données du client, les données de l'authentificateur, la signature, le défi et l'ID de l'identifiant sont envoyés au serveur. Le défi, l'authentificateur et les données du client sont d'abord vérifiés. Cette partie est presque identique aux étapes de vérification de l'attestation.
 
-<!-- go -->
-
-```untype
+```go
 import (
 	"bytes"
 	"crypto/sha256"
@@ -150,7 +142,7 @@ import (
 
 var challenge []byte
 
-// Verify the challenge and delete it from storage.
+// Vérifiez le défi et supprimez-le du stockage.
 
 var clientDataJSON, authenticatorData []byte
 
@@ -158,34 +150,32 @@ var clientData ClientData
 json.Unmarshal(clientDataJSON, &clientData)
 
 if clientData.Type != "webauthn.get" {
-	return errors.New("invalid type")
+	return errors.New("type invalide")
 }
 if clientData.Challenge != base64.URLEncoding.WithPadding(base64.NoPadding).EncodeToString(challenge) {
-	return errors.New("invalid challenge")
+	return errors.New("défi invalide")
 }
 if clientData.Origin != "https://example.com" {
-	return errors.New("invalid origin")
+	return errors.New("origine invalide")
 }
 
 if len(authenticatorData) < 37 {
-	return errors.New("invalid authenticator data")
+	return errors.New("données de l'authentificateur invalides")
 }
 rpIdHash := authenticatorData[0:32]
 expectedRpIdHash := sha256.Sum256([]byte("example.com"))
 if !bytes.Equal(rpIdHash, expectedRpIdHash[:]) {
-	return errors.New("invalid relying party ID")
+	return errors.New("ID de la partie de confiance invalide")
 }
-// Check for the "user present" flag.
+// Vérifiez le drapeau "utilisateur présent".
 if (authenticatorData[32] & 1) != 1 {
-	return errors.New("invalid flag")
+	return errors.New("drapeau invalide")
 }
 ```
 
-The next step is to verify the signature. Use credential ID to get the user's public key and verify the signature, which is ASN.1 DER encoded. The algorithm depends on the parameters passed when the credential was created.
+L'étape suivante consiste à vérifier la signature. Utilisez l'ID de l'identifiant pour obtenir la clé publique de l'utilisateur et vérifiez la signature, qui est encodée en ASN.1 DER. L'algorithme dépend des paramètres passés lors de la création de l'identifiant.
 
-<!-- go -->
-
-```untype
+```go
 import (
 	"crypto/ecdsa"
 	"crypto/sha256"
@@ -196,12 +186,12 @@ var publicKey *ecdsa.PublicKey
 var signature []byte
 
 hashedClientDataJSON := sha256.Sum256(clientDataJSON)
-// Concatenate the authenticator data with the hashed client data JSON.
+// Concaténez les données de l'authentificateur avec les données JSON du client hachées.
 data := append(authenticatorData, hashedClientDataJSON[:]...)
 hash := sha256.Sum256(data)
 
 validSignature := ecdsa.VerifyASN1(publicKey, hash[:], signature)
 if !validSignature {
-	return errors.New("invalid signature")
+	return errors.New("signature invalide")
 }
 ```

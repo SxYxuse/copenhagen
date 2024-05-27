@@ -1,18 +1,18 @@
 ---
-title: 'Generating random values'
+title: 'Génération de valeurs aléatoires'
 ---
 
-# Generating random values
+# Génération de valeurs aléatoires
 
-## Overview
+## Vue d'ensemble
 
-Pseudo-random generators often provided by the standard math package are fast but predictable. When dealing with cryptography, having access to a strong random generator is essential.
+Les générateurs pseudo-aléatoires souvent fournis par le package mathématique standard sont rapides mais prévisibles. Lorsqu'il s'agit de cryptographie, avoir accès à un générateur aléatoire fort est essentiel.
 
-This page describes how to generate random strings and numbers from randomly generated bits.
+Cette page décrit comment générer des chaînes et des nombres aléatoires à partir de bits générés de manière aléatoire.
 
-## Random strings
+## Chaînes aléatoires
 
-The easiest and safest way to generate random strings is to generate random bytes and encode them with base16 (hex), base32, or base64 encoding schemes.
+La manière la plus facile et la plus sûre de générer des chaînes aléatoires est de générer des octets aléatoires et de les encoder avec des schémas d'encodage base16 (hex), base32 ou base64.
 
 <!-- go -->
 
@@ -29,9 +29,9 @@ func generateRandomString() string {
 }
 ```
 
-### Custom character set
+### Ensemble de caractères personnalisé
 
-If the character set length fits with an existing encoding scheme (e.g. base64), you can customize the characters used.
+Si la longueur de l'ensemble de caractères correspond à un schéma d'encodage existant (par exemple, base64), vous pouvez personnaliser les caractères utilisés.
 
 <!-- go -->
 
@@ -50,7 +50,7 @@ func generateRandomString() string {
 }
 ```
 
-If not, you would need a high-quality [random number generator](#random-integers) to generate an integer within a custom range.
+Sinon, vous auriez besoin d'un générateur de nombres aléatoires de haute qualité pour générer un entier dans une plage personnalisée.
 
 <!-- go -->
 
@@ -66,19 +66,19 @@ func generateRandomString() string {
 }
 ```
 
-## Random integers
+## Entiers aléatoires
 
-If the range is a power of 2 (2, 4, 8, 16 etc), a simple bit masking will do the trick.
+Si la plage est une puissance de 2 (2, 4, 8, 16, etc.), un simple masquage de bits fera l'affaire.
 
 <!-- go -->
 
 ```untype
 bytes := make([]byte, 1)
 rand.Read(bytes)
-value := bytes[0] & 0x03 // random value between [0, 3]
+value := bytes[0] & 0x03 // valeur aléatoire entre [0, 3]
 ```
 
-For a custom range, a simple approach is to generate a very large random number compared to the maximum and use the modulo operator. Since this introduces [a modulo bias](#biases), the random integer must be sufficiently large. For example, if the maximum was 10 and we generated 32 random bits, the bias would be around 1/250,000,000 - which can be good enough for most use cases.
+Pour une plage personnalisée, une approche simple consiste à générer un très grand nombre aléatoire par rapport au maximum et à utiliser l'opérateur modulo. Étant donné que cela introduit [un biais de modulo](#biais), l'entier aléatoire doit être suffisamment grand. Par exemple, si le maximum était 10 et que nous avons généré 32 bits aléatoires, le biais serait d'environ 1/250,000,000 - ce qui peut être suffisant pour la plupart des cas d'utilisation.
 
 <!-- go -->
 
@@ -88,18 +88,18 @@ import (
 	"encoding/binary"
 )
 
-// Generates a random integer between [0, max).
-// `max` should not be a very large number.
+// Génère un entier aléatoire entre [0, max).
+// `max` ne devrait pas être un nombre très grand.
 func generateRandomUint32(max uint32): uint32 {
 	var max uint32 = 10
 	bytes := make([]byte, 4)
 	rand.Read(bytes)
-	randUint32 := binary.BigEndian.Uint32(bytes) // Convert bytes to uint32
+	randUint32 := binary.BigEndian.Uint32(bytes) // Convertit les octets en uint32
 	return randUint32 % max
 }
 ```
 
-Another common approach is to multiply our maximum with a random float. This can also [introduce a bias](#biases) but it can be fine if the maximum is small enough and, unlike our first approach, the bias is spread out.
+Une autre approche courante consiste à multiplier notre maximum par un nombre flottant aléatoire. Cela peut également [introduire un biais](#biais) mais cela peut être acceptable si le maximum est assez petit et, contrairement à notre première approche, le biais est réparti.
 
 <!-- go -->
 
@@ -110,7 +110,7 @@ func generateRandomUint32(max uint32): uint32 {
 }
 ```
 
-The safest approach then is to use rejection sampling, where a random value is repeatedly generated until it's under the maximum. To increase the likelihood the random value is under the maximum, we can only generate the maximum number of bits required to represent the maximum. For example, if the maximum is 10, we would only have to generate 4 bits. In the code below, we're generating a random byte and then masking the 4 leading bits to get 4 random bits (8-4=4).
+L'approche la plus sûre consiste alors à utiliser l'échantillonnage par rejet, où une valeur aléatoire est générée à plusieurs reprises jusqu'à ce qu'elle soit inférieure au maximum. Pour augmenter la probabilité que la valeur aléatoire soit inférieure au maximum, nous ne pouvons générer que le nombre maximum de bits nécessaires pour représenter le maximum. Par exemple, si le maximum est 10, nous n'aurions qu'à générer 4 bits aléatoires. Dans le code ci-dessous, nous générons un octet aléatoire, puis masquons les 4 bits de tête pour obtenir 4 bits aléatoires (8-4=4).
 
 <!-- go -->
 
@@ -140,9 +140,9 @@ func generateRandomUint64(max *big.Int) uint64 {
 }
 ```
 
-### Random floating-point numbers between 0 and 1
+### Nombres flottants aléatoires entre 0 et 1
 
-A common approach is to generate a random integer and divide it by a very big number. When doing this, it is crucial that the denominator is large enough, and that the denominator is a power of 2 to be accurately represented by float64.
+Une approche courante consiste à générer un entier aléatoire et à le diviser par un très grand nombre. Lorsque vous faites cela, il est crucial que le dénominateur soit suffisamment grand et que le dénominateur soit une puissance de 2 pour être représenté de manière précise par float64.
 
 <!-- go -->
 
@@ -152,7 +152,7 @@ func generateRandomFloat64() float64 {
 }
 ```
 
-Another approach is to generate 52 random bits for the mantissa (float64) and convert that into a float within [0, 1). This will be generally faster since it avoids division.
+Une autre approche consiste à générer 52 bits aléatoires pour la mantisse (float64) et à convertir cela en un flottant dans [0, 1). Cela sera généralement plus rapide car il évite la division.
 
 <!-- go -->
 
@@ -166,37 +166,37 @@ func generateRandomFloat64() float64 {
 	bytes := make([]byte, 7)
 	rand.Read(bytes)
 	bytes = append(make([]byte, 1), bytes...)
-	// set exponent part to 0b01111111111
+	// Définit la partie exposant à 0b01111111111
 	bytes[0] = 0x3f
-	bytes[1] |= 0xf0
+	bytes[1] |= 0xf
 	return math.Float64frombits(binary.BigEndian.Uint64(bytes)) - 1
 }
 ```
 
-## Biases
+## Biais
 
-A very common bias seen in the wild is the modulo bias. For example, if `RANDOM_INT` is an integer in [0, 10), some numbers will appear 3 times (0, 1) while others will appear 2 times (2, 3).
+Un biais très courant observé dans la nature est le biais de modulo. Par exemple, si `RANDOM_INT` est un entier dans [0, 10), certains nombres apparaîtront 3 fois (0, 1) tandis que d'autres apparaîtront 2 fois (2, 3).
 
 ```untype
 RANDOM_INT % 4
 ```
 
-To calculate the approximate bias, we can use the formula below.
+Pour calculer le biais approximatif, nous pouvons utiliser la formule ci-dessous.
 
 ```untype
 1 / ( RANDOM_BITS - LOG2(MAX) )
 ```
 
-For example, if we use 8 random bits and the maximum is 100, the approximate bias would be 0.6:
+Par exemple, si nous utilisons 8 bits aléatoires et que le maximum est 100, le biais approximatif serait de 0,6 :
 
 ```untype
 1 / ( 8 - LOG2(100) ) ≈ 1 / (8-6.4) ≈ 0.6
 ```
 
-Multiplying the maximum with a random floating point number can introduce bias as well. In this example, `RANDOM_FLOAT` is within [0, 1) so the output will be [0, 5).
+Multiplier le maximum par un nombre flottant aléatoire peut également introduire un biais. Dans cet exemple, `RANDOM_FLOAT` est compris entre [0, 1), donc la sortie sera [0, 5).
 
 ```untype
 FLOOR( RANDOM_FLOAT * 5 )
 ```
 
-Let's say `RANDOM_FLOAT` can be one of 8 numbers: 0, 0.125, 0.25, ..., 0.875. In this case, (0, 1, 3) will appear 1/4 times while (2, 4) will only appear 1/8 times. While this is an extreme example, it is essential that the random float provides enough "randomness" compared to the maximum.
+Disons que `RANDOM_FLOAT` peut être l'une des 8 valeurs : 0, 0,125, 0,25, ..., 0,875. Dans ce cas, (0, 1, 3) apparaîtront 1/4 du temps tandis que (2, 4) n'apparaîtront que 1/8 du temps. Bien que ce soit un exemple extrême, il est essentiel que le flottant aléatoire fournisse suffisamment de "hasard" par rapport au maximum.

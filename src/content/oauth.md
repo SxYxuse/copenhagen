@@ -4,22 +4,22 @@ title: 'OAuth'
 
 # OAuth
 
-## Overview
+## Vue d'ensemble
 
-OAuth is a widely used protocol for authorization. It's what's behind "Sign in with Google" and "Sign in with GitHub." It allows users to grant access to their resources on an external service, like Google, to your application without sharing their credentials. Instead of implementing a password-based auth, we can replace it with OAuth to let a third-party service handle authentication. You can then get the user's profile and use that to create users and sessions.
+OAuth est un protocole largement utilisé pour l'autorisation. Il est à la base de fonctionnalités telles que "Sign in with Google" et "Sign in with GitHub". Il permet aux utilisateurs de donner accès à leurs ressources sur un service externe, comme Google, à votre application sans partager leurs identifiants. Plutôt que de mettre en œuvre une authentification basée sur des mots de passe, nous pouvons utiliser OAuth pour laisser un service tiers gérer l'authentification. Vous pouvez ensuite obtenir le profil de l'utilisateur et l'utiliser pour créer des utilisateurs et des sessions.
 
-In a basic OAuth flow, the user is redirected to a third-party service, the service authenticates the user, and the user is redirected back to your application. An access token for the user is made available which allows you to request resources on behalf of the user.
+Dans un flux OAuth de base, l'utilisateur est redirigé vers un service tiers, le service authentifie l'utilisateur, et l'utilisateur est redirigé vers votre application. Un jeton d'accès pour l'utilisateur est alors disponible, permettant de demander des ressources au nom de l'utilisateur.
 
-It requires 2 server endpoints in your application:
+Cela nécessite 2 points de terminaison serveur dans votre application :
 
-1. Login endpoint (GET): Redirects the user to the OAuth provider.
-2. Callback endpoint (GET): Handles the redirect from the OAuth provider.
+1. Point de terminaison de connexion (GET) : Redirige l'utilisateur vers le fournisseur OAuth.
+2. Point de terminaison de rappel (GET) : Gère la redirection depuis le fournisseur OAuth.
 
-There are multiple versions of OAuth, with OAuth 2.0 being the latest one. This page will only cover OAuth 2.0, specifically the authorization code grant type, as standardized in [RFC 6749](https://datatracker.ietf.org/doc/html/rfc6749). The implicit grant type is deprecated and should not be used.
+Il existe plusieurs versions d'OAuth, la plus récente étant OAuth 2.0. Cette page ne couvrira que OAuth 2.0, en particulier le type d'octroi de code d'autorisation, comme standardisé dans la [RFC 6749](https://datatracker.ietf.org/doc/html/rfc6749). Le type d'octroi implicite est obsolète et ne doit pas être utilisé.
 
-## Create authorization URL
+## Création de l'URL d'autorisation
 
-Using GitHub as an example, the first step is to create a GET endpoint (login endpoint) that redirects the user to GitHub. The redirect location is the authorization URL with a few parameters.
+En utilisant GitHub comme exemple, la première étape consiste à créer un point de terminaison GET (point de terminaison de connexion) qui redirige l'utilisateur vers GitHub. La destination de redirection est l'URL d'autorisation avec quelques paramètres.
 
 ```untype
 https://github.com/login/oauth/authorize?
@@ -29,35 +29,35 @@ response_type=code
 &state=<STATE>
 ```
 
-The state is used to ensure the user initiating the process and the one we redirected back to (in the next section) are the same user. As such, a new state must be generated on each request. While it is not strictly required by the spec, it is highly recommended and may be required depending on the provider. It should be generated using a cryptographically secure random generator and have at least 112 bits of entropy. The state can also be used to pass data from the login endpoint to the callback endpoint, though a cookie can just be used instead.
+Le paramètre `state` est utilisé pour s'assurer que l'utilisateur initiant le processus et celui qui est redirigé (dans la section suivante) sont le même utilisateur. Ainsi, un nouvel état doit être généré à chaque demande. Bien qu'il ne soit pas strictement requis par la spécification, il est fortement recommandé et peut être requis en fonction du fournisseur. Il doit être généré à l'aide d'un générateur aléatoire cryptographiquement sécurisé et avoir au moins 112 bits d'entropie. Le `state` peut également être utilisé pour transmettre des données du point de terminaison de connexion au point de terminaison de rappel, bien qu'un cookie puisse également être utilisé à la place.
 
-Your server must keep track of the state associated with each attempt. One simple approach is to store it as a cookie with `HttpOnly`, `SameSite=Lax`, `Secure`, and `Path=/` attributes. You may also assign the state to the current session.
+Votre serveur doit suivre l'état associé à chaque tentative. Une approche simple consiste à le stocker sous forme de cookie avec les attributs `HttpOnly`, `SameSite=Lax`, `Secure`, et `Path=/`. Vous pouvez également assigner l'état à la session en cours.
 
-You can define a `scope` parameter to request access to additional resources. If you have multiple scopes, they should be separated by spaces.
+Vous pouvez définir un paramètre `scope` pour demander l'accès à des ressources supplémentaires. Si vous avez plusieurs portées, elles doivent être séparées par des espaces.
 
 ```untype
 &scope=email%20identity
 ```
 
-You can create a "Sign in" button by adding a link to the login endpoint.
+Vous pouvez créer un bouton "Se connecter" en ajoutant un lien vers le point de terminaison de connexion.
 
 <!-- html -->
 
 ```untype
-<a href="/login/github">Sign in with GitHub</a>
+<a href="/login/github">Se connecter avec GitHub</a>
 ```
 
-## Validate authorization code
+## Validation du code d'autorisation
 
-The user will be redirected to the callback endpoint (as defined in `redirect_uri`) with a single-use authorization code, which is included as a query parameter. This code is then exchanged for an access token.
+L'utilisateur sera redirigé vers le point de terminaison de rappel (tel que défini dans `redirect_uri`) avec un code d'autorisation à usage unique, inclus comme paramètre de requête. Ce code est ensuite échangé contre un jeton d'accès.
 
 ```untype
 https://example.com/login/github/callback?code=<CODE>&state=<STATE>
 ```
 
-If you add a state to the authorization URL, the redirect request will include a `state` parameter. It is critical to check that it matches the state associated with the attempt. Return an error if the state is missing or if they don't match. A common mistake is forgetting to check whether the `state` parameter exists in the URL.
+Si vous ajoutez un état à l'URL d'autorisation, la requête de redirection inclura un paramètre `state`. Il est crucial de vérifier qu'il correspond à l'état associé à la tentative. Retournez une erreur si l'état est manquant ou s'ils ne correspondent pas. Une erreur courante consiste à oublier de vérifier si le paramètre `state` existe dans l'URL.
 
-The code is sent to the OAuth provider's token endpoint via an `application/x-www-form-urlencoded` POST request.
+Le code est envoyé au point de terminaison du jeton du fournisseur OAuth via une requête POST `application/x-www-form-urlencoded`.
 
 ```untype
 POST https://github.com/login/oauth/access_token
@@ -71,7 +71,7 @@ grant_type=authorization_code
 &code=<CODE>
 ```
 
-If your OAuth provider uses a client secret, it should be base64 encoded with the client ID and secret included in the Authorization header (HTTP basic authorization scheme).
+Si votre fournisseur OAuth utilise un secret client, il doit être encodé en base64 avec l'ID client et le secret inclus dans l'en-tête d'autorisation (schéma d'autorisation HTTP basic).
 
 <!-- go -->
 
@@ -80,7 +80,7 @@ var clientId, clientSecret string
 credentials := base64.StdEncoding.EncodeToString([]byte(clientId + ":" + clientSecret))
 ```
 
-Some providers also allow the client secret to be included in the body.
+Certains fournisseurs permettent également d'inclure le secret client dans le corps de la requête.
 
 ```untype
 POST https://github.com/login/oauth/access_token
@@ -94,23 +94,23 @@ grant_type=authorization_code
 &code=<CODE>
 ```
 
-The request will return an access token, which can then be used to get the user's identity. It may also include other fields such as `refresh_token` and `expires_in`.
+La requête retournera un jeton d'accès, qui peut ensuite être utilisé pour obtenir l'identité de l'utilisateur. Elle peut également inclure d'autres champs tels que `refresh_token` et `expires_in`.
 
 ```untype
 { "access_token": "<ACCESS_TOKEN>" }
 ```
 
-For example, using the access token, you can get their GitHub profile and store their GitHub user ID, which will allow you to get their registered account when they sign in again. Be aware that the email address provided by the OAuth provider may not be verified. You may need to manually verify user emails or block users without a verified email.
+Par exemple, en utilisant le jeton d'accès, vous pouvez obtenir leur profil GitHub et stocker leur ID utilisateur GitHub, ce qui vous permettra d'obtenir leur compte enregistré lorsqu'ils se reconnecteront. Soyez conscient que l'adresse e-mail fournie par le fournisseur OAuth peut ne pas être vérifiée. Vous devrez peut-être vérifier manuellement les e-mails des utilisateurs ou bloquer les utilisateurs sans e-mail vérifié.
 
-The access token itself should never be used as a replacement for sessions.
+Le jeton d'accès lui-même ne doit jamais être utilisé comme substitut aux sessions.
 
-## Proof key for code exchange (PKCE) flow
+## Flux de preuve de clé pour l'échange de code (PKCE)
 
-PKCE was introduced in [RFC 7636](https://datatracker.ietf.org/doc/html/rfc7636) to provide additional protection for OAuth 2.0. We recommend using it in addition to state and a client secret if your OAuth provider supports it. Be aware that some OAuth providers do not require a client secret when PKCE is enabled, in which case PKCE should not be used.
+PKCE a été introduit dans la [RFC 7636](https://datatracker.ietf.org/doc/html/rfc7636) pour fournir une protection supplémentaire pour OAuth 2.0. Nous recommandons de l'utiliser en plus de `state` et d'un secret client si votre fournisseur OAuth le supporte. Sachez que certains fournisseurs OAuth n'exigent pas de secret client lorsque PKCE est activé, auquel cas PKCE ne devrait pas être utilisé.
 
-PKCE can replace state entirely, as both protect against CSRF attacks, but it may be required by your OAuth provider.
+PKCE peut remplacer complètement `state`, car les deux protègent contre les attaques CSRF, mais il peut être requis par votre fournisseur OAuth.
 
-A new code verifier must be generated on each request. It should be generated using a cryptographically secure random generator and have at least 112 bits of entropy (256 bits recommended by the RFC). Similar to state, your application must keep track of the code verifier associated with each attempt (using cookies or sessions). A base64url (no padding) encoded SHA256 hash of it called a code challenge is included in the authorization URL.
+Un nouveau vérificateur de code doit être généré à chaque demande. Il doit être généré à l'aide d'un générateur aléatoire cryptographiquement sécurisé et avoir au moins 112 bits d'entropie (256 bits recommandés par la RFC). Comme pour `state`, votre application doit suivre le vérificateur de code associé à chaque tentative (en utilisant des cookies ou des sessions). Un hachage SHA256 encodé en base64url (sans remplissage) de celui-ci, appelé un défi de code, est inclus dans l'URL d'autorisation.
 
 <!-- go -->
 
@@ -130,7 +130,7 @@ response_type=code
 &code_challenge=<CODE_CHALLENGE>
 ```
 
-In the callback endpoint, the code verifier of the current attempt should be sent alongside the authorization code.
+Dans le point de terminaison de rappel, le vérificateur de code de la tentative actuelle doit être envoyé en même temps que le code d'autorisation.
 
 ```untype
 POST https://oauth2.googleapis.com/token
@@ -147,7 +147,7 @@ grant_type=authorization_code
 
 ## OpenID Connect (OIDC)
 
-[OpenID Connect](https://openid.net/specs/openid-connect-core-1_0.html) is a widely used protocol built on top of OAuth 2.0. An important addition to OAuth is that the identity provider returns an ID token alongside the access token. An ID token is a [JSON Web Token](https://datatracker.ietf.org/doc/html/rfc7519) that includes user data. It will always include a unique identifier for the user in the `sub` field.
+[OpenID Connect](https://openid.net/specs/openid-connect-core-1_0.html) est un protocole largement utilisé basé sur OAuth 2.0. Une addition importante à OAuth est que le fournisseur d'identité renvoie un jeton d'ID en plus du jeton d'accès. Un jeton d'ID est un [JSON Web Token](https://datatracker.ietf.org/doc/html/rfc7519) qui inclut les données utilisateur. Il inclura toujours un identifiant unique pour l'utilisateur dans le champ `sub`.
 
 ```untype
 {
@@ -156,21 +156,23 @@ grant_type=authorization_code
 }
 ```
 
-While you can validate the token with a public key, this is not strictly necessary for server-side applications if you're using HTTPS for communications.
+Bien que vous puissiez valider le jeton avec une clé publique,
 
-### OpenID Connect Discovery
+ce n'est pas strictement nécessaire pour les applications côté serveur si vous utilisez HTTPS pour les communications.
 
-OpenID Connect defines a [discovery mechanism](https://openid.net/specs/openid-connect-discovery-1_0.html) that allows clients to dynamically fetch the OpenID Provider's configuration, including the OAuth 2.0 endpoint locations. This eliminates the need to hard-code endpoint URLs in your application. To use OpenID Connect Discovery, your OpenID Provider must have a discovery endpoint available.
+### Découverte OpenID Connect
 
-The discovery endpoint is a well-known URL that returns a JSON document containing the OpenID Provider's configuration information. Note that not all OAuth providers support OpenID Connect Discovery. Check your provider's documentation to determine if they offer a discovery endpoint. If not, you may still need to manually configure the endpoint URLs in your application.
+OpenID Connect définit un [mécanisme de découverte](https://openid.net/specs/openid-connect-discovery-1_0.html) qui permet aux clients de récupérer dynamiquement la configuration du fournisseur OpenID, y compris les emplacements des points de terminaison OAuth 2.0. Cela élimine la nécessité de coder en dur les URL des points de terminaison dans votre application. Pour utiliser la découverte OpenID Connect, votre fournisseur OpenID doit avoir un point de terminaison de découverte disponible.
 
-The well-known URL has the path `/.well-known/openid-configuration`. For example, Google's Discovery Endpoint looks like this:
+Le point de terminaison de découverte est une URL bien connue qui renvoie un document JSON contenant les informations de configuration du fournisseur OpenID. Notez que tous les fournisseurs OAuth ne supportent pas la découverte OpenID Connect. Consultez la documentation de votre fournisseur pour déterminer s'ils offrent un point de terminaison de découverte. Sinon, vous devrez peut-être toujours configurer manuellement les URL des points de terminaison dans votre application.
+
+L'URL bien connue a le chemin `/.well-known/openid-configuration`. Par exemple, le point de terminaison de découverte de Google ressemble à ceci :
 
 ```untype
 https://accounts.google.com/.well-known/openid-configuration
 ```
 
-The endpoint will return a JSON object containing the OpenID Provider's configuration, including the endpoint URLs for authorization, token exchange, and user info retrieval.
+Le point de terminaison retournera un objet JSON contenant la configuration du fournisseur OpenID, y compris les URL des points de terminaison pour l'autorisation, l'échange de jetons et la récupération des informations utilisateur.
 
 <!-- json -->
 
@@ -186,12 +188,12 @@ The endpoint will return a JSON object containing the OpenID Provider's configur
 }
 ```
 
-With OpenID Connect Discovery, your application can dynamically adapt to changes in the OpenID Provider's configuration without requiring code updates. This ensures that your application always uses the most up-to-date endpoint URLs. The drawback is that you will have to make extra fetch requests.
+Avec la découverte OpenID Connect, votre application peut s'adapter dynamiquement aux changements dans la configuration du fournisseur OpenID sans nécessiter de mises à jour du code. Cela garantit que votre application utilise toujours les URL des points de terminaison les plus récentes. L'inconvénient est que vous devrez effectuer des requêtes supplémentaires.
 
-## Account linking
+## Liaison de comptes
 
-Account linking allows users to sign in with any of their social accounts and be authenticated as the same user on your application. It is usually done by checking the email address registered with the provider. If you're using email to link accounts, make sure to validate the user's email. Most providers provide a `is_verified` field or similar in user profiles. Do not assume that the email has been verified unless the provider explicitly mentions it in their documentation. Users without a verified email should be prevented from completing the authentication process and prompted to verify their email first.
+La liaison de comptes permet aux utilisateurs de se connecter avec n'importe lequel de leurs comptes sociaux et d'être authentifiés en tant que même utilisateur sur votre application. Cela se fait généralement en vérifiant l'adresse e-mail enregistrée auprès du fournisseur. Si vous utilisez l'email pour lier les comptes, assurez-vous de valider l'email de l'utilisateur. La plupart des fournisseurs fournissent un champ `is_verified` ou similaire dans les profils utilisateur. Ne supposez pas que l'email est vérifié à moins que le fournisseur ne le mentionne explicitement dans leur documentation. Les utilisateurs sans email vérifié doivent être empêchés de terminer le processus d'authentification et invités à vérifier leur email d'abord.
 
-## Other considerations
+## Autres considérations
 
-- [Open redirect](/content/open-redirect)
+- [Redirection ouverte](/content/open-redirect)
