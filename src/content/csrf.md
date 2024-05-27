@@ -67,7 +67,7 @@ Il s'agit d'une méthode très simple où chaque session a un jeton CSRF [unique
 
 Si le stockage du jeton côté serveur n'est pas une option, l'utilisation de cookies double soumission signés est une autre approche. Cela diffère du simple cookie double soumission en ce que le jeton inclus dans le formulaire est signé avec un secret.
 
-Un nouveau [jeton](/content/server-side-tokens) est généré et haché avec HMAC SHA-256 en utilisant une clé secrète.
+Un nouveau [token](/content/server-side-tokens) est généré et haché avec HMAC SHA-256 en utilisant une clé secrète.
 
 <!-- go -->
 
