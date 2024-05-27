@@ -1,10 +1,10 @@
 ---
-title: 'Authentification par mot de passe'
+title: 'Password authentication'
 ---
 
-# Authentification par mot de passe
+# Password authentication
 
-## Validation des entrées
+## Input validation
 
 - Les mots de passe doivent comporter au moins 8 caractères.
 - Ne fixez pas une longueur maximale de mot de passe trop basse. Une valeur comprise entre 64 et 256 caractères est une bonne limite maximale.
@@ -13,7 +13,7 @@ title: 'Authentification par mot de passe'
 - Utilisez des bibliothèques comme [`zxcvbn`](https://github.com/dropbox/zxcvbn) pour vérifier la faiblesse des mots de passe.
 - Détectez les mots de passe compromis avec des API telles que [haveibeenpwned](https://haveibeenpwned.com/API/v3).
 
-### Vérification des mots de passe compromis
+### Checking for compromised passwords
 
 Un service gratuit appelé [haveibeenpwned](https://haveibeenpwned.com/API/v3) peut être utilisé pour vérifier un mot de passe contre les fuites passées. Hash le mot de passe avec SHA-1 (encodé en hexadécimal) et envoyez les 5 premiers caractères.
 
@@ -29,7 +29,7 @@ ec68dea7966a1ea2ba9408be4dcc409884f
 f10a49ecd2ada17a120dc359f162b84e12c
 ```
 
-## Stockage des mots de passe
+## Password storage
 
 Les mots de passe doivent être salés et hachés avant le stockage. Nous recommandons d'utiliser [Argon2id](#argon2id) avec salage.
 
@@ -102,7 +102,7 @@ Bcrypt a une longueur d'entrée maximale de 72 octets, et certaines implémentat
 
 [Voir OWASP pour plus de détails](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html#bcrypt).
 
-## Attaques par force brute
+## Brute-force attacks
 
 Les mots de passe sont vulnérables aux attaques par force brute. Il existe principalement 2 approches pour les attaques par force brute :
 
@@ -115,4 +115,20 @@ Le throttling basé sur l'IP doit toujours être mis en œuvre. Un exemple basiq
 
 Une autre couche de sécurité que vous pouvez mettre en œuvre est la détection des bots en utilisant des tests comme les Captchas.
 
-Enfin, assurez-vous d'une certaine force de mots de passe pour les utilisateurs. Assurez-vous que les mots
+Enfin, assurez-vous d'avoir une certaine robustesse des mots de passe pour les utilisateurs. Assurez-vous que les mots de passe ne sont pas faibles et qu'ils n'ont pas été inclus dans des fuites antérieures.
+
+<!-- Voir la section [Validation des mots de passe](#password-validation). -->
+
+## Error handling
+
+Comme règle générale, les messages d'erreur devraient être vagues et génériques. Par exemple, un formulaire de connexion devrait afficher "Nom d'utilisateur ou mot de passe incorrect" plutôt que "Nom d'utilisateur incorrect" ou "Mot de passe incorrect". De même, un formulaire de connexion ne devrait pas indiquer si un e-mail est déjà utilisé par un compte existant.
+
+Cependant, d'un point de vue de l'expérience utilisateur, il est plus convivial de dire directement à l'utilisateur que son nom d'utilisateur ou son e-mail est incorrect. Cela devrait convenir pour les sites où les noms d'utilisateur sont déjà publics (par exemple, les réseaux sociaux) ou où la validité d'un e-mail n'est pas importante (c'est-à-dire la plupart des sites). Cela rend les attaques de force brute légèrement plus faciles car les attaquants n'ont besoin que de deviner des mots de passe, mais vous devriez déjà avoir mis en place des [mesures appropriées](#brute-force-attacks).
+
+Si vous devez garder le nom d'utilisateur ou l'e-mail privé, assurez-vous de ne pas divulguer ces informations via les formulaires d'inscription et de réinitialisation de mot de passe. Par exemple, lors de la création d'un compte, vous pouvez demander à l'utilisateur un message du type "Nous avons envoyé un e-mail dans votre boîte de réception avec des instructions supplémentaires" indépendamment de la disponibilité de l'e-mail. S'ils ont déjà un compte, vous pouvez inclure cette information dans l'e-mail lui-même. Même en renvoyant un message générique, il peut être possible de déterminer si un utilisateur existe ou non en vérifiant les temps de réponse. Par exemple, si vous ne validez le mot de passe que lorsque le nom d'utilisateur est valide. La protection contre les attaques par temporisation est difficile, alors n'optez pour cette solution que si c'est strictement nécessaire.
+
+## Other considerations
+
+- Ne pas empêcher les utilisateurs de copier-coller des mots de passe car cela décourage l'utilisation de gestionnaires de mots de passe.
+- Demander le mot de passe actuel lorsqu'un utilisateur tente de changer son mot de passe.
+- [Redirection ouverte](/content/open-redirect).

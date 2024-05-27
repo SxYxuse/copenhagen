@@ -1,10 +1,10 @@
 ---
-title: 'Authentification multi-facteurs (MFA)'
+title: 'Multi-factor authentication (MFA)'
 ---
 
-# Authentification multi-facteurs (MFA)
+# Multi-factor authentication (MFA)
 
-## Vue d'ensemble
+## Overview
 
 La MFA exige qu'un utilisateur fournisse plus qu'un simple mot de passe pour s'authentifier. Il existe principalement 5 types de facteurs :
 
@@ -14,7 +14,7 @@ La MFA exige qu'un utilisateur fournisse plus qu'un simple mot de passe pour s'a
 - Où vous êtes
 - Quelque chose que vous faites
 
-## Mots de passe à usage unique basés sur le temps (TOTP)
+## Time-based one-time passwords (TOTP)
 
 Le TOTP est défini dans la [RFC 6238](https://datatracker.ietf.org/doc/html/rfc6238), qui est basée sur les mots de passe à usage unique basés sur le hachage (HOTP), définis dans la [RFC 4226](https://www.ietf.org/rfc/rfc4226.txt).
 
@@ -22,7 +22,7 @@ Le TOTP standard utilise une application d'authentification, généralement inst
 
 Chaque utilisateur possède une clé secrète. Celle-ci est partagée avec l'application d'authentification de l'utilisateur par un code QR. En utilisant cette clé secrète et l'heure actuelle, l'application d'authentification peut générer un nouveau OTP. Votre application demande le OTP actuel et peut le valider en en générant un en utilisant les mêmes paramètres. Étant donné que l'heure actuelle est utilisée pour générer le code, chaque code n'est valide que pour une période définie (généralement 30 secondes).
 
-### Génération de code QR
+### Generate QR code
 
 HMAC SHA-1 est utilisé pour générer les TOTPs. La clé secrète est exactement de 160 bits et doit être générée à l'aide d'un générateur aléatoire cryptographiquement sécurisé. Chaque utilisateur doit avoir sa propre clé secrète, qui doit être stockée sur votre serveur. La clé secrète peut être chiffrée avant le stockage si vous craignez de divulguer accidentellement les enregistrements de votre base de données. Il est important de se rappeler que le chiffrement des données ne protégera pas contre les attaquants ayant un accès au niveau du système à vos serveurs.
 
@@ -36,7 +36,7 @@ otpauth://totp/example%20app:John%20Doe?secret=JBSWY3DPEHPK3PXP&issuer=Example%2
 
 Lorsque l'utilisateur demande un nouveau code QR, générez une nouvelle clé secrète et invalidez la précédente.
 
-### Validation des OTPs
+### Validate OTPs
 
 Pour valider un TOTP, nous devons d'abord en générer un.
 
@@ -87,7 +87,7 @@ La limitation des tentatives doit être mise en œuvre. Un exemple de base est d
 
 Les Passkeys vous permettent d'utiliser des méthodes d'authentification sur l'appareil, telles que la biométrie et les codes PIN. Voir le [guide Passkeys](/content/passkeys).
 
-## Codes de récupération
+## Recovery codes
 
 Si votre application utilise la MFA, nous recommandons de fournir aux utilisateurs un ou plusieurs codes de récupération. Ce sont des mots de passe à usage unique qui peuvent être utilisés à la place des passkeys/OTPs pour se connecter et réinitialiser leur second facteur lorsqu'un utilisateur perd l'accès à ses appareils. Les codes doivent être générés à l'aide d'un générateur aléatoire cryptographiquement sécurisé. Ils peuvent être générés avec seulement 40 bits d'entropie (10 caractères lorsqu'ils sont encodés en hexadécimal) en supposant que la limitation des tentatives est mise en œuvre.
 

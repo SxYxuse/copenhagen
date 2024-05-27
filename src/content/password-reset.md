@@ -1,10 +1,10 @@
 ---
-title: 'Réinitialisation de mot de passe'
+title: 'Password reset'
 ---
 
-# Réinitialisation de mot de passe
+# Password reset
 
-## Vue d'ensemble
+## Overview
 
 Une approche courante pour la réinitialisation de mot de passe consiste à utiliser l'adresse e-mail de l'utilisateur. L'utilisateur saisit son adresse e-mail et, si l'e-mail est valide, un lien de réinitialisation de mot de passe est envoyé à la boîte aux lettres. Cela nécessite que chaque utilisateur ait une adresse e-mail unique - consultez le guide de [Vérification d'e-mail](/content/email-verification).
 
@@ -12,7 +12,7 @@ L'e-mail n'a pas besoin d'être vérifié avant d'envoyer un lien de réinitiali
 
 Cette page ne couvrira que les liens de réinitialisation de mot de passe car c'est l'approche la plus courante.
 
-## Liens de réinitialisation de mot de passe
+## Password reset links
 
 La réinitialisation de mot de passe nécessite 2 pages. La première est la page où les utilisateurs saisissent leur adresse e-mail.
 
@@ -34,10 +34,10 @@ Assurez-vous de définir la balise [Politique de référent](https://developer.m
 
 Si l'utilisateur a mis en œuvre [l'authentification multi-facteurs](/content/mfa), par exemple via des applications d'authentification ou des passkeys, il devrait être invité à s'authentifier en utilisant son deuxième facteur avant de saisir son nouveau mot de passe.
 
-## Gestion des erreurs
+## Error handling
 
 Si l'e-mail est invalide, vous pouvez soit dire à l'utilisateur que l'e-mail est invalide, soit garder le message vague (par exemple, "Nous enverrons un e-mail de réinitialisation si le compte existe"). Cela dépendra de si vous souhaitez rendre la validité des e-mails publique ou privée. Voir [Gestion des erreurs](/content/password-authentication#error-handling) dans le guide d'authentification par mot de passe pour plus d'informations.
 
-## Limitation du débit
+## Rate limiting
 
 Tout point de terminaison pouvant envoyer des e-mails devrait avoir une limitation stricte du débit mise en œuvre. Utilisez des Captchas si nécessaire.

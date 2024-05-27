@@ -4,7 +4,7 @@ title: 'Sessions'
 
 # Sessions
 
-## Vue d'ensemble
+## Overview
 
 Tout au long de la visite d'un utilisateur sur votre site web, il effectuera plusieurs requêtes à votre serveur. Si vous devez maintenir un état persistant, comme les préférences utilisateur, entre ces requêtes, HTTP ne fournit pas de mécanisme pour cela. C'est un protocole sans état.
 
@@ -14,9 +14,9 @@ Il est important que l'ID de session soit suffisamment long et aléatoire, sinon
 
 Selon votre application, vous pouvez avoir à gérer des sessions uniquement pour les utilisateurs authentifiés, ou pour les utilisateurs authentifiés et non authentifiés. Vous pouvez même gérer deux types de sessions différents - une pour l'authentification et une autre pour l'état non lié à l'authentification.
 
-## Durée de vie des sessions
+## Session lifetime
 
-Si vous ne gérez que des sessions pour les utilisateurs authentifiés, une nouvelle session est créée chaque fois qu'un utilisateur se connecte. Si vous prévoyez de gérer des sessions pour les utilisateurs non authentifiés également, des sessions doivent être automatiquement créées lorsqu'une requête entrante ne comprend pas une session valide. Assurez-vous de ne pas rendre votre application vulnérable aux [attaques de fixations de session](#session-fixation-attacks).
+Si vous ne gérez que des sessions pour les utilisateurs authentifiés, une nouvelle session est créée chaque fois qu'un utilisateur se connecte. Si vous prévoyez de gérer des sessions pour les utilisateurs non authentifiés également, des sessions doivent être automatiquement créées lorsqu'une requête entrante ne comprend pas une session valide. Assurez-vous de ne pas rendre votre application vulnérable aux [attaques de fixations](#session-fixation-attacks).
 
 Pour les applications critiques en matière de sécurité, il est crucial que les sessions expirent automatiquement. Cela minimise le temps dont dispose un attaquant pour détourner des sessions. L'expiration doit correspondre à la durée pendant laquelle l'utilisateur est censé utiliser votre application en une seule session.
 
@@ -45,11 +45,11 @@ func validateSession(sessionId string) (*Session, error) {
 }
 ```
 
-### Mode sudo
+### Sudo mode
 
 Une alternative aux sessions de courte durée est d'implémenter des sessions de longue durée couplées avec le mode sudo. Le mode sudo permet aux utilisateurs authentifiés d'accéder à des composants critiques pour la sécurité pendant une période limitée en se réauthentifiant avec l'une de leurs informations d'identification (mot de passe, clé d'accès, TOTP, etc.). Une façon simple de mettre en œuvre cela est de suivre le moment où l'utilisateur a utilisé ses informations d'identification pour la dernière fois dans chaque session. Cette approche offre les avantages de sécurité des sessions de courte durée sans ennuyer les utilisateurs fréquents. Cela peut également aider à lutter contre le [détournement de session](#session-hijacking).
 
-## Détournement de session
+## Session hijacking
 
 Le détournement de session est un autre terme pour le vol de sessions. Les attaques courantes incluent le cross-site scripting (XSS), les attaques de type man-in-the-middle (MITM) et le sniffing de session. Les attaques MITM sont particulièrement difficiles à atténuer car il incombe finalement aux utilisateurs de protéger leur appareil et leur réseau. Néanmoins, il existe quelques moyens de protéger vos utilisateurs.
 
@@ -57,7 +57,7 @@ Tout d'abord, envisagez de suivre l'agent utilisateur (appareil) et l'adresse IP
 
 Étant donné que les adresses IP et les en-têtes de requête peuvent être facilement usurpés, il est recommandé d'implémenter le [mode sudo](#sudo-mode) pour toutes les applications critiques en matière de sécurité.
 
-## Invalidation des sessions
+## Session invalidation
 
 Les sessions peuvent être invalidées en les supprimant du stockage côté serveur et côté client.
 
@@ -65,7 +65,7 @@ Lorsqu'un utilisateur se déconnecte, invalidez la session en cours, ou pour les
 
 Toutes les sessions de l'utilisateur doivent également être invalidées lorsqu'il obtient de nouveaux droits (vérification de l'email, nouveau rôle, etc.) ou change de mot de passe.
 
-## Stockage côté client
+## Client storage
 
 Le client doit stocker l'ID de session sur l'appareil de l'utilisateur pour être utilisé lors des requêtes suivantes. Le navigateur fournit principalement 2 moyens de stocker les données - les cookies et l'API Web Storage. Les cookies doivent être préférés pour les sites web car ils sont automatiquement inclus dans les requêtes par le navigateur.
 
@@ -85,13 +85,13 @@ L'expiration maximale pour un cookie est comprise entre 1 et 2 ans. Si vous pré
 
 `Lax` doit être préféré à `Strict` pour l'attribut `SameSite` car l'utilisation de`Strict` empêchera le navigateur d'envoyer le cookie de session lorsque l'utilisateur visite votre application via un lien externe.
 
-### Stockage Web API
+### Web Storage API
 
 Une autre option est de stocker les IDs de session dans `localStorage` ou `sessionStorage`. Si votre site web a une vulnérabilité XSS, cela permettra aux attaquants de lire directement et de voler l'ID de session de l'utilisateur. Il est particulièrement vulnérable aux attaques de la chaîne d'approvisionnement, car les jetons peuvent être volés en lisant simplement l'ensemble du stockage local, sans utiliser d'exploits spécifiques à l'application.
 
 Les jetons de session peuvent être envoyés avec la requête en utilisant l'en-tête `Authorization` par exemple. Ne les envoyez pas dans les URLs comme paramètres de requête ou dans les données de formulaire, ni les jetons envoyés de cette manière ne doivent être acceptés.
 
-## Attaques de fixation de session
+## Session fixation attacks
 
 Les applications qui maintiennent des sessions pour les utilisateurs authentifiés et non authentifiés et réutilisent la session en cours lorsqu'un utilisateur se connecte sont vulnérables aux attaques de fixation de session.
 

@@ -2,19 +2,19 @@
 title: 'Passkeys'
 ---
 
-# Clés d'accès
+# Passkeys
 
-## Vue d'ensemble
+## Overview
 
 Les clés d'accès sont basées sur le standard [Web Authentication (WebAuthn)](https://www.w3.org/TR/webauthn-2/) et permettent aux applications d'authentifier les utilisateurs via des méthodes d'authentification intégrées dans les appareils, y compris les biométries et les codes PIN. Elles peuvent être plus sécurisées que les mots de passe traditionnels car elles ne nécessitent pas que l'utilisateur se souvienne de ses mots de passe. Elles peuvent remplacer complètement les mots de passe ou être utilisées en plus des mots de passe comme [second facteur](/content/mfa).
 
 Les clés d'accès sont basées sur la cryptographie à clé publique, où chaque utilisateur possède une paire de clés publique-privée. La clé privée est stockée dans l'appareil de l'utilisateur, tandis que la clé publique est stockée dans votre application. L'appareil crée une signature avec la clé privée et votre application peut utiliser la clé publique pour la vérifier.
 
-## Défi
+## Challenge
 
 Chaque attestation et assertion est associée à un défi. Un défi est un [jeton](/content/server-side-tokens) à usage unique généré aléatoirement et stocké sur le serveur pour empêcher les attaques de relecture. L'entropie minimale recommandée est de 16 octets.
 
-## Enregistrement
+## Registration
 
 Sur le client, obtenez un nouveau défi du serveur et créez un nouvel identifiant avec l'[API Web Authentication](https://developer.mozilla.org/fr/docs/Web/API/Web_Authentication_API). Cela invite l'utilisateur à s'authentifier avec son appareil. Les navigateurs comme Safari ne permettront d'appeler cette méthode que si elle a été initiée par une interaction utilisateur (clic sur un bouton).
 
@@ -111,7 +111,7 @@ Les données de l'authentificateur incluent également un compteur de signatures
 
 Enfin, vérifiez si la clé publique est valide et créez un nouvel utilisateur avec sa clé publique et l'ID de l'identifiant. La clé publique est au format SubjectPublicKeyInfo. Si vous supportez plusieurs algorithmes, vous pouvez analyser la clé publique pour obtenir l'identifiant de l'algorithme.
 
-## Authentification
+## Authentication
 
 Générez un défi sur le serveur et utilisez-le pour authentifier l'utilisateur côté client.
 

@@ -1,16 +1,16 @@
 ---
-title: 'Génération de valeurs aléatoires'
+title: 'Generating random values'
 ---
 
-# Génération de valeurs aléatoires
+# Generating random values
 
-## Vue d'ensemble
+## Overview
 
 Les générateurs pseudo-aléatoires souvent fournis par le package mathématique standard sont rapides mais prévisibles. Lorsqu'il s'agit de cryptographie, avoir accès à un générateur aléatoire fort est essentiel.
 
 Cette page décrit comment générer des chaînes et des nombres aléatoires à partir de bits générés de manière aléatoire.
 
-## Chaînes aléatoires
+## Random strings
 
 La manière la plus facile et la plus sûre de générer des chaînes aléatoires est de générer des octets aléatoires et de les encoder avec des schémas d'encodage base16 (hex), base32 ou base64.
 
@@ -29,7 +29,7 @@ func generateRandomString() string {
 }
 ```
 
-### Ensemble de caractères personnalisé
+### Custom character set
 
 Si la longueur de l'ensemble de caractères correspond à un schéma d'encodage existant (par exemple, base64), vous pouvez personnaliser les caractères utilisés.
 
@@ -66,7 +66,7 @@ func generateRandomString() string {
 }
 ```
 
-## Entiers aléatoires
+## Random integers
 
 Si la plage est une puissance de 2 (2, 4, 8, 16, etc.), un simple masquage de bits fera l'affaire.
 
@@ -140,7 +140,7 @@ func generateRandomUint64(max *big.Int) uint64 {
 }
 ```
 
-### Nombres flottants aléatoires entre 0 et 1
+### Random floating-point numbers between 0 and 1
 
 Une approche courante consiste à générer un entier aléatoire et à le diviser par un très grand nombre. Lorsque vous faites cela, il est crucial que le dénominateur soit suffisamment grand et que le dénominateur soit une puissance de 2 pour être représenté de manière précise par float64.
 
@@ -173,7 +173,7 @@ func generateRandomFloat64() float64 {
 }
 ```
 
-## Biais
+## Biases
 
 Un biais très courant observé dans la nature est le biais de modulo. Par exemple, si `RANDOM_INT` est un entier dans [0, 10), certains nombres apparaîtront 3 fois (0, 1) tandis que d'autres apparaîtront 2 fois (2, 3).
 

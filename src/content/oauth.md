@@ -17,7 +17,7 @@ Cela nécessite 2 points de terminaison serveur dans votre application :
 
 Il existe plusieurs versions d'OAuth, la plus récente étant OAuth 2.0. Cette page ne couvrira que OAuth 2.0, en particulier le type d'octroi de code d'autorisation, comme standardisé dans la [RFC 6749](https://datatracker.ietf.org/doc/html/rfc6749). Le type d'octroi implicite est obsolète et ne doit pas être utilisé.
 
-## Création de l'URL d'autorisation
+## Create authorization URL
 
 En utilisant GitHub comme exemple, la première étape consiste à créer un point de terminaison GET (point de terminaison de connexion) qui redirige l'utilisateur vers GitHub. La destination de redirection est l'URL d'autorisation avec quelques paramètres.
 
@@ -47,7 +47,7 @@ Vous pouvez créer un bouton "Se connecter" en ajoutant un lien vers le point de
 <a href="/login/github">Se connecter avec GitHub</a>
 ```
 
-## Validation du code d'autorisation
+## Validate authorization code
 
 L'utilisateur sera redirigé vers le point de terminaison de rappel (tel que défini dans `redirect_uri`) avec un code d'autorisation à usage unique, inclus comme paramètre de requête. Ce code est ensuite échangé contre un jeton d'accès.
 
@@ -104,7 +104,7 @@ Par exemple, en utilisant le jeton d'accès, vous pouvez obtenir leur profil Git
 
 Le jeton d'accès lui-même ne doit jamais être utilisé comme substitut aux sessions.
 
-## Flux de preuve de clé pour l'échange de code (PKCE)
+## Proof key for code exchange (PKCE) flow
 
 PKCE a été introduit dans la [RFC 7636](https://datatracker.ietf.org/doc/html/rfc7636) pour fournir une protection supplémentaire pour OAuth 2.0. Nous recommandons de l'utiliser en plus de `state` et d'un secret client si votre fournisseur OAuth le supporte. Sachez que certains fournisseurs OAuth n'exigent pas de secret client lorsque PKCE est activé, auquel cas PKCE ne devrait pas être utilisé.
 
@@ -145,7 +145,7 @@ grant_type=authorization_code
 &code_verifier=<CODE_VERIFIER>
 ```
 
-## OpenID Connect (OIDC)
+## OpenID Connect Discovery
 
 [OpenID Connect](https://openid.net/specs/openid-connect-core-1_0.html) est un protocole largement utilisé basé sur OAuth 2.0. Une addition importante à OAuth est que le fournisseur d'identité renvoie un jeton d'ID en plus du jeton d'accès. Un jeton d'ID est un [JSON Web Token](https://datatracker.ietf.org/doc/html/rfc7519) qui inclut les données utilisateur. Il inclura toujours un identifiant unique pour l'utilisateur dans le champ `sub`.
 
@@ -190,10 +190,10 @@ Le point de terminaison retournera un objet JSON contenant la configuration du f
 
 Avec la découverte OpenID Connect, votre application peut s'adapter dynamiquement aux changements dans la configuration du fournisseur OpenID sans nécessiter de mises à jour du code. Cela garantit que votre application utilise toujours les URL des points de terminaison les plus récentes. L'inconvénient est que vous devrez effectuer des requêtes supplémentaires.
 
-## Liaison de comptes
+## Account linking
 
 La liaison de comptes permet aux utilisateurs de se connecter avec n'importe lequel de leurs comptes sociaux et d'être authentifiés en tant que même utilisateur sur votre application. Cela se fait généralement en vérifiant l'adresse e-mail enregistrée auprès du fournisseur. Si vous utilisez l'email pour lier les comptes, assurez-vous de valider l'email de l'utilisateur. La plupart des fournisseurs fournissent un champ `is_verified` ou similaire dans les profils utilisateur. Ne supposez pas que l'email est vérifié à moins que le fournisseur ne le mentionne explicitement dans leur documentation. Les utilisateurs sans email vérifié doivent être empêchés de terminer le processus d'authentification et invités à vérifier leur email d'abord.
 
-## Autres considérations
+## Other considerations
 
 - [Redirection ouverte](/content/open-redirect)

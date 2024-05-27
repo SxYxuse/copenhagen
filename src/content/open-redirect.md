@@ -1,8 +1,8 @@
 ---
-title: 'Redirection ouverte'
+title: 'Open redirect'
 ---
 
-# Redirection ouverte
+# Open redirect
 
 La redirection ouverte est une vulnérabilité où votre application permet à un utilisateur de contrôler une redirection.
 

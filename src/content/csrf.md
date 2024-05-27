@@ -1,10 +1,10 @@
 ---
-title: 'Falsification de requête intersite (CSRF)'
+title: 'Cross-site request forgery (CSRF)'
 ---
 
-# Falsification de requête intersite (CSRF)
+# Cross-site request forgery (CSRF)
 
-## Vue d'ensemble
+## Overview
 
 Les attaques CSRF permettent à un attaquant de faire des requêtes authentifiées au nom des utilisateurs lorsque les identifiants sont stockés dans des cookies.
 
@@ -41,7 +41,7 @@ await fetch('https://banque.com/envoyer-argent', {
 
 Bien que les requêtes entre deux domaines totalement différents soient considérées à la fois comme cross-site et cross-origin, celles entre deux sous-domaines ne sont pas considérées comme cross-site mais sont considérées comme des requêtes cross-origin. Bien que le nom de falsification de requête intersite implique des requêtes cross-site, vous devriez être strict par défaut et protéger votre application contre les attaques cross-origin également.
 
-## Prévention
+## Prevention
 
 Les attaques CSRF peuvent être évitées en n'acceptant que les requêtes POST et similaires (PUT, DELETE, etc.) faites par les navigateurs à partir d'une origine de confiance.
 
@@ -49,7 +49,7 @@ La protection doit être mise en œuvre pour toutes les routes qui traitent des 
 
 Pour la méthode courante basée sur des jetons, le jeton ne doit pas être à usage unique (par exemple, un nouveau jeton pour chaque soumission de formulaire) car cela se casserait avec un seul bouton de retour. Il est également crucial que vos pages aient une politique stricte de partage de ressources cross-origin (CORS). Si `Access-Control-Allow-Credentials` n'est pas strict, un site malveillant peut envoyer une requête GET pour obtenir un formulaire HTML avec un jeton CSRF valide.
 
-### Jetons anti-CSRF
+### Anti-CSRF tokens
 
 Il s'agit d'une méthode très simple où chaque session a un jeton CSRF [unique](/content/server-side-tokens) associé.
 
@@ -63,7 +63,7 @@ Il s'agit d'une méthode très simple où chaque session a un jeton CSRF [unique
 </form>
 ```
 
-### Cookies double soumission signés
+### Signed double-submit cookies
 
 Si le stockage du jeton côté serveur n'est pas une option, l'utilisation de cookies double soumission signés est une autre approche. Cela diffère du simple cookie double soumission en ce que le jeton inclus dans le formulaire est signé avec un secret.
 
@@ -93,11 +93,11 @@ func generateCSRFToken(sessionId string) (string, []byte) {
 
 Le jeton est stocké sous forme de cookie et le HMAC est stocké dans le formulaire. Le cookie doit avoir les drapeaux `Secure`, `HttpOnly` et `SameSite`. Pour valider une requête, le cookie peut être utilisé pour vérifier la signature envoyée dans les données du formulaire.
 
-#### Cookies double soumission traditionnels
+#### Traditional double-submit cookies
 
 Les cookies double soumission réguliers qui ne sont pas signés vous laisseront toujours vulnérables si un attaquant a accès à un sous-domaine du domaine de votre application. Cela leur permettrait de définir leurs propres cookies double soumission.
 
-### En-tête Origin
+### Origin header
 
 Une façon très simple de prévenir les attaques CSRF est de vérifier l'en-tête `Origin` de la requête pour les requêtes non-GET. Il s'agit d'un en-tête relativement nouveau qui inclut l'[origine](https://developer.mozilla.org/fr/docs/Glossary/Origin) de la requête. Si vous vous appuyez sur cet en-tête, il est crucial que votre application n'utilise pas de requêtes GET pour modifier des ressources.
 
@@ -124,7 +124,7 @@ L'en-tête `Origin` est pris en charge par tous les navigateurs modernes depuis 
 
 L'en-tête `Referer` est un en-tête similaire introduit avant l'en-tête `Origin`. Cela peut être utilisé en tant que solution de repli si l'en-tête `Origin` n'est pas défini.
 
-## Attribut SameSite des cookies
+## SameSite cookie attribute
 
 Les cookies de session doivent avoir un drapeau `SameSite`. Ce drapeau détermine quand le navigateur inclut le cookie dans les requêtes. Les cookies `SameSite=Lax` ne seront envoyés dans les requêtes cross-site que si la requête utilise une [méthode HTTP sûre](https://developer.mozilla.org/fr/docs/Glossary/Safe/HTTP) (comme GET), tandis que les cookies `SameSite=Strict` ne seront envoyés dans aucune requête cross-site. Nous recommandons d'utiliser `Lax` par défaut car les cookies `Strict` ne seront pas envoyés lorsqu'un utilisateur accède à votre site via un lien externe.
 

@@ -16,7 +16,7 @@
 
 <pre
 	class={cn(
-		'relative mb-4 mt-6 overflow-x-auto rounded-card border-2 border-muted py-8',
+		'relative mb-4 mt-6 overflow-x-auto bg-muted/50 rounded-card border-2 border-muted py-8',
 		className
 	)}
 	use:setCodeString
