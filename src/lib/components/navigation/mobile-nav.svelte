@@ -3,7 +3,7 @@
 	import * as Sheet from '../ui/sheet';
 	import { Icons } from '../icons';
 	import { Button } from '../ui/button';
-	import { navigation } from '$lib/config';
+	import { navigation, siteConfig } from '$lib/config';
 
 	let open = false;
 </script>
@@ -21,7 +21,7 @@
 	</Sheet.Trigger>
 	<Sheet.Content side="left" class="pr-0">
 		<MobileLink href="/" class="flex items-center font-quicksand font-bold" {open}
-			>The Copenhagen Book</MobileLink
+			>{siteConfig.name}</MobileLink
 		>
 		<div class="my-4 h-[calc(100vh-8rem)] overflow-auto pb-10 pl-6">
 			<div class="flex flex-col space-y-2">

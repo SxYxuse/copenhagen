@@ -4,6 +4,7 @@
 
 	import { Button } from './ui/button';
 	import { MobileNav } from './navigation';
+	import { siteConfig } from '$lib/config';
 </script>
 
 <header
@@ -17,7 +18,7 @@
 					href="/"
 					class="ml-2 rounded-md font-quicksand focus-visible:outline-none text-xl font-bold focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-background"
 				>
-					The Copenhagen Book
+					{siteConfig.name}
 				</a>
 			</div>
 			<div class="flex items-center justify-end gap-2.5">
